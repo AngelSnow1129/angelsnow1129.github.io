@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/AS.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/AS.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"angelsnow1129.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="VNCTF-RE复盘V&amp;VCTF 的逆向题，不过感觉难度还是挺大，看书间隙再刷WP。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="V&amp;NCTF-RE">
+<meta property="og:url" content="https://angelsnow1129.github.io/2021/05/10/V-NCTF-RE/index.html">
+<meta property="og:site_name" content="AngelSnow 个人博客">
+<meta property="og:description" content="VNCTF-RE复盘V&amp;VCTF 的逆向题，不过感觉难度还是挺大，看书间隙再刷WP。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210426144247.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210426144155.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210426150239.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210426232023.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210426232025.png">
+<meta property="og:image" content="e:%E6%96%87%E6%A1%A3%E7%AC%94%E8%AE%B0%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/image-20210427161646766.png">
+<meta property="og:image" content="e:/%25E6%2596%2587%25E6%25A1%25A3/%25E7%25AC%2594%25E8%25AE%25B0/%25E5%258D%259A%25E5%25AE%25A2%25E5%259B%25BE%25E7%2589%2587/image-20210427161552058.png">
+<meta property="og:image" content="e:%E6%96%87%E6%A1%A3%E7%AC%94%E8%AE%B0%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/image-20210428110004801.png">
+<meta property="og:image" content="e:%E6%96%87%E6%A1%A3%E7%AC%94%E8%AE%B0%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/image-20210428110459834.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210428193615.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210428200734.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210428200838.png">
+<meta property="article:published_time" content="2021-05-10T12:02:15.000Z">
+<meta property="article:modified_time" content="2021-05-10T12:04:05.652Z">
+<meta property="article:author" content="Snow">
+<meta property="article:tag" content="算法, 程序开发, 生活, 操作系统, 信息安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://qiniu.angelsnow.site/20210426144247.png">
+
+<link rel="canonical" href="https://angelsnow1129.github.io/2021/05/10/V-NCTF-RE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>V&NCTF-RE | AngelSnow 个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+  <!--pjax：防止跳转页面音乐暂停-->
+ <script src="https://cdn.jsdelivr.net/npm/[email protected]/pjax.js"></script>
+ 
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+
+  
+    <script src="/js/cursor/love.min.js"></script>
+  
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AngelSnow 个人博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">真，善，美</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://angelsnow1129.github.io/2021/05/10/V-NCTF-RE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/AS.jpg">
+      <meta itemprop="name" content="Snow">
+      <meta itemprop="description" content="Hope, Marvel, Youth.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AngelSnow 个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          V&NCTF-RE
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-05-10 20:02:15 / 修改时间：20:04:05" itemprop="dateCreated datePublished" datetime="2021-05-10T20:02:15+08:00">2021-05-10</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="热度" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">热度：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="VNCTF-RE"><a href="#VNCTF-RE" class="headerlink" title="VNCTF-RE"></a>VNCTF-RE</h1><p>复盘V&amp;VCTF 的逆向题，不过感觉难度还是挺大，看书间隙再刷WP。</p>
+<span id="more"></span>
+
+<h2 id="notsudoku"><a href="#notsudoku" class="headerlink" title="notsudoku"></a>notsudoku</h2><p>源文件：</p>
+<p>查壳发现有UPX壳。所以使用UPX脱壳机，把他脱掉。</p>
+<p><img src="http://qiniu.angelsnow.site/20210426144247.png" alt="image-20210426144245818"></p>
+<p>脱壳后。</p>
+<p><img src="http://qiniu.angelsnow.site/20210426144155.png" alt="image-20210426144146802"></p>
+<p>然后<img src="http://qiniu.angelsnow.site/20210426150239.png" alt="image-20210426150237295"></p>
+<p>于是疯狂看资料：</p>
+<p>1.<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37552052/article/details/88093427">py可执行文件反编译教程–exe转换py</a> (里面有介绍反编译的处理方法)</p>
+<p>2.<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/4da8dada77bc">pyinstxtractor.py 与 uncompyle6</a></p>
+<p>3.<a target="_blank" rel="noopener" href="https://blog.csdn.net/ZH013/article/details/105116715">PyInstaller封装程序反编译 PyInstxtractor +Uncompale</a></p>
+<p>失败的探索过程。。。。</p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">解压成功后，同路径下会出现一个[filename]<span class="number">_</span>extracted的文件夹，这里面就包含了主程序lockyfud，我们要反编译的就是这个文件，其他的都是依赖库，如<span class="keyword">out</span><span class="number">00</span>-PYZ-extracted文件夹里的都是库文件，我们不必关心。我们这时可能会纳闷，为什么该文件不是.pyc文件？这可能是pyinstxtractor的一点不足，转换出来的主程序格式不对，我们还需要对其进行手动修复。</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://qiniu.angelsnow.site/20210426232023.png" alt="image-20210426232022317"></p>
+<p>成功的画面。。我也不知道怎么就把环境改成功了。</p>
+<p><img src="http://qiniu.angelsnow.site/20210426232025.png" alt="image-20210426232012268"></p>
+<p>成功搞出pyc文件后，所以就找那个符合条件一点</p>
+<p><img src="E:%E6%96%87%E6%A1%A3%E7%AC%94%E8%AE%B0%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87\image-20210427161646766.png" alt="image-20210427161646766"></p>
+<p>就找到一个，就是这个2.pyc 不知道为什么叫做2.pyc 在前面的一些教程之中，有看见一些应该是原来的名字的呀。不懂。</p>
+<p>然后使用python3.9不适合</p>
+<p><img src="E:/%25E6%2596%2587%25E6%25A1%25A3/%25E7%25AC%2594%25E8%25AE%25B0/%25E5%258D%259A%25E5%25AE%25A2%25E5%259B%25BE%25E7%2589%2587/image-20210427161552058.png" alt="image-20210427161552058"></p>
+<p>于是就把python3.9 卸载了，用的3,8 然后3.8的路径里面好像有中文，又不可以。</p>
+<p>于是乎找教程，然后在看了挺多之后，决定再下一次uncompyle6，然后好像就可以了。</p>
+<p>然后对于pyc文件的处理网上有着挺多的教程。然后这里Mark一下，自己做一个pyc文件的总结，因为感觉在这上面花的时间太多了。WP里面的三行字我花了几天才搞好，有点意思。</p>
+<h3 id="MARK-写关于pyc的使用踩坑记录"><a href="#MARK-写关于pyc的使用踩坑记录" class="headerlink" title="MARK-写关于pyc的使用踩坑记录"></a>MARK-写关于pyc的使用踩坑记录</h3><p>最后修改文件前面的内容，千辛万苦得到了py文件。</p>
+<p><img src="E:%E6%96%87%E6%A1%A3%E7%AC%94%E8%AE%B0%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87\image-20210428110004801.png" alt="image-20210428110004801"></p>
+<p>打开一览以及源码：</p>
+<p><img src="E:%E6%96%87%E6%A1%A3%E7%AC%94%E8%AE%B0%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87\image-20210428110459834.png" alt="image-20210428110459834"></p>
+ <details> <summary>
+
+
+
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># uncompyle6 version 3.7.4</span></span><br><span class="line"><span class="comment"># Python bytecode 3.7 (3394)</span></span><br><span class="line"><span class="comment"># Decompiled from: Python 3.7.8 (tags/v3.7.8:4b47a5b6ba, Jun 28 2020, 08:53:46) [MSC v.1916 64 bit (AMD64)]</span></span><br><span class="line"><span class="comment"># Embedded file name: 2.py</span></span><br><span class="line"><span class="comment"># Compiled at: 1995-09-28 00:18:56</span></span><br><span class="line"><span class="comment"># Size of source mod 2**32: 272 bytes</span></span><br><span class="line">import time, sys, hashlib</span><br><span class="line"></span><br><span class="line">class あ:</span><br><span class="line"></span><br><span class="line">    def __init__(self):</span><br><span class="line">        self.う = &#123;&#125;</span><br><span class="line">        self.な = []</span><br><span class="line">        self.に = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        self.ぬ = []</span><br><span class="line">        self.ね = <span class="number">65</span></span><br><span class="line"></span><br><span class="line">    def え(self, えひ):</span><br><span class="line"></span><br><span class="line">        def の(f):</span><br><span class="line">            self.う[えひ] = f</span><br><span class="line">            return f</span><br><span class="line"></span><br><span class="line">        return の</span><br><span class="line"></span><br><span class="line">    def お(self, は):</span><br><span class="line">        return self.う.get(は)</span><br><span class="line"></span><br><span class="line">    def か(self):</span><br><span class="line">        き = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> True:</span><br><span class="line">            く = self.な[き][<span class="number">0</span>]</span><br><span class="line">            け = self.な[き][<span class="number">1</span>]</span><br><span class="line">            こ = self.な[き][<span class="number">2</span>]</span><br><span class="line">            さ = self.お(く)</span><br><span class="line">            さ(け, こ)</span><br><span class="line">            き += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">い = あ()</span><br><span class="line"></span><br><span class="line">@い.え(<span class="string">&#x27;し&#x27;</span>)</span><br><span class="line">def f(a, b):</span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        い.ぬ += b</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@い.え(<span class="string">&#x27;す&#x27;</span>)</span><br><span class="line">def f(a, b):</span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">1</span>:</span><br><span class="line">        print(い.に)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> a == <span class="number">2</span>:</span><br><span class="line">            print(い.ぬ)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">if</span> a == <span class="number">3</span>:</span><br><span class="line">                print((い.flag), end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(a, end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@い.え(<span class="string">&#x27;せ&#x27;</span>)</span><br><span class="line">def f(a, b):</span><br><span class="line">    sys.<span class="keyword">exit</span>()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@い.え(<span class="string">&#x27;そ&#x27;</span>)</span><br><span class="line">def f(a, b):</span><br><span class="line">    い.に = input()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@い.え(<span class="string">&#x27;た&#x27;</span>)</span><br><span class="line">def f(a, b):</span><br><span class="line">    time.sleep(a)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@い.え(<span class="string">&#x27;ち&#x27;</span>)</span><br><span class="line">def f(a, b):</span><br><span class="line">    <span class="keyword">if</span> len(い.に) % <span class="number">2</span> != <span class="number">0</span>:</span><br><span class="line">        sys.<span class="keyword">exit</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> い.に:</span><br><span class="line">        <span class="keyword">if</span> ord(i) &gt; <span class="number">52</span> or ord(i) &lt; <span class="number">48</span>:</span><br><span class="line">            sys.<span class="keyword">exit</span>()</span><br><span class="line"></span><br><span class="line">    x = str(hashlib.new(<span class="string">&#x27;md5&#x27;</span>, bytes((い.に), encoding=<span class="string">&#x27;utf8&#x27;</span>)).hexdigest())</span><br><span class="line">    <span class="keyword">if</span> x[:<span class="number">6</span>] != <span class="string">&#x27;e3a912&#x27;</span>:</span><br><span class="line">        sys.<span class="keyword">exit</span>()</span><br><span class="line">    い.flag = x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@い.え(<span class="string">&#x27;と&#x27;</span>)</span><br><span class="line">def f(a, b):</span><br><span class="line">    ふ = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(い.に), <span class="number">2</span>):</span><br><span class="line">        ふ += <span class="number">1</span></span><br><span class="line">        a = int(い.に[i])</span><br><span class="line">        b = int(い.に[(i + <span class="number">1</span>)])</span><br><span class="line">        い.ぬ[a][b] = ふ</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@い.え(<span class="string">&#x27;つ&#x27;</span>)</span><br><span class="line">def f(a, b):</span><br><span class="line">    <span class="keyword">if</span> い.ぬ[<span class="number">0</span>][<span class="number">1</span>] != <span class="number">24</span> or い.ぬ[<span class="number">4</span>][<span class="number">3</span>] != <span class="number">2</span>:</span><br><span class="line">        sys.<span class="keyword">exit</span>()</span><br><span class="line">    <span class="keyword">if</span> い.ぬ[<span class="number">0</span>][<span class="number">2</span>] != <span class="number">1</span> or い.ぬ[<span class="number">2</span>][<span class="number">3</span>] != <span class="number">20</span>:</span><br><span class="line">        sys.<span class="keyword">exit</span>()</span><br><span class="line">    <span class="keyword">if</span> い.ぬ[<span class="number">1</span>][<span class="number">0</span>] != <span class="number">23</span> or い.ぬ[<span class="number">3</span>][<span class="number">4</span>] != <span class="number">3</span>:</span><br><span class="line">        sys.<span class="keyword">exit</span>()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@い.え(<span class="string">&#x27;て&#x27;</span>)</span><br><span class="line">def f(a, b):</span><br><span class="line">    ね = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> b == -<span class="number">1</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">            ね += い.ぬ[a][i]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ね != い.ね:</span><br><span class="line">            sys.<span class="keyword">exit</span>()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">            ね += い.ぬ[i][b]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ね != い.ね:</span><br><span class="line">            sys.<span class="keyword">exit</span>()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">い.な = [</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;す&#x27;</span>, <span class="string">&#x27;welcome baby~ &#x27;</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;す&#x27;</span>, <span class="string">&#x27;input your flag~:&#x27;</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;そ&#x27;</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;す&#x27;</span>, <span class="string">&#x27;your input is:&#x27;</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;す&#x27;</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;す&#x27;</span>, <span class="string">&quot;let&#x27;s check......&quot;</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;た&#x27;</span>, <span class="number">0.5</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;し&#x27;</span>, <span class="number">1</span>, [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>)]]],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;し&#x27;</span>, <span class="number">1</span>, [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>)]]],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;し&#x27;</span>, <span class="number">1</span>, [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>)]]],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;し&#x27;</span>, <span class="number">1</span>, [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>)]]],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;し&#x27;</span>, <span class="number">1</span>, [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>)]]],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;ち&#x27;</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;と&#x27;</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;つ&#x27;</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;て&#x27;</span>, <span class="number">0</span>, -<span class="number">1</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;て&#x27;</span>, <span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;て&#x27;</span>, <span class="number">2</span>, -<span class="number">1</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;て&#x27;</span>, <span class="number">3</span>, -<span class="number">1</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;て&#x27;</span>, <span class="number">4</span>, -<span class="number">1</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;て&#x27;</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;て&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;て&#x27;</span>, <span class="number">0</span>, <span class="number">2</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;て&#x27;</span>, <span class="number">0</span>, <span class="number">3</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;て&#x27;</span>, <span class="number">0</span>, <span class="number">4</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;す&#x27;</span>, <span class="string">&#x27;Goodjob!&#x27;</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;す&#x27;</span>, <span class="string">&#x27;The flag is vnctf&#123;&#x27;</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;す&#x27;</span>, <span class="number">3</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;す&#x27;</span>, <span class="string">&#x27;&#125;&#x27;</span>, <span class="number">0</span>],</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&#x27;せ&#x27;</span>, <span class="number">0</span>, <span class="number">0</span>]]</span><br><span class="line">い.か()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">details</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="http://qiniu.angelsnow.site/20210428193615.png" alt="image-20210428193605636"></p>
+<p>这个玩意是真的看不懂。怎么连日文都出来了。蒙了。。。</p>
+<h4 id="后面的看不懂了，直接把WP粘贴在下面，看不懂python。。"><a href="#后面的看不懂了，直接把WP粘贴在下面，看不懂python。。" class="headerlink" title="后面的看不懂了，直接把WP粘贴在下面，看不懂python。。"></a>后面的看不懂了，直接把WP粘贴在下面，看不懂python。。</h4><h3 id="官方WP："><a href="#官方WP：" class="headerlink" title="官方WP："></a>官方WP：</h3><p>这⾥由于存在⾮ascii变量名，因此如果反编译使⽤的python版本⽐较低可能会出现问题。 到这⼀步以后整理⽂件，基本可以摸清楚这个程序的逻辑，然后把变量重命名：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time </span><br><span class="line"><span class="keyword">import</span> sys </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vm</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span>   <span class="title">init</span>  (<span class="params">self</span>):</span> </span><br><span class="line">		self.routes = &#123;&#125;			<span class="comment"># 路由字典</span></span><br><span class="line">		self.cmd = []	<span class="comment"># 指令列表</span></span><br><span class="line">		self._<span class="built_in">input</span> = <span class="string">&#x27;&#x27;</span>		<span class="comment"># 标准输⼊</span></span><br><span class="line">		<span class="comment"># 下⾯是定义的临时变量self.square = []</span></span><br><span class="line">		self.tmp = <span class="number">65</span> <span class="comment"># ⽤于存放临时结果</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">route</span>(<span class="params">self, route_str</span>):</span> </span><br><span class="line">		<span class="function"><span class="keyword">def</span> <span class="title">decorator</span>(<span class="params">f</span>):</span></span><br><span class="line">			self.routes[route_str] = f </span><br><span class="line">			<span class="keyword">return</span> f</span><br><span class="line">		<span class="keyword">return</span> decorator</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">serve</span>(<span class="params">self, path</span>):</span></span><br><span class="line">		<span class="keyword">return</span> self.routes.get(path) </span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">run</span>(<span class="params">self</span>):</span></span><br><span class="line">		vip = <span class="number">0</span></span><br><span class="line">		<span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">			vcmd = self.cmd[vip][<span class="number">0</span>]	<span class="comment"># 取指令</span></span><br><span class="line">			<span class="comment"># print(vcmd)</span></span><br><span class="line">			vnum1 = self.cmd[vip][<span class="number">1</span>]	<span class="comment"># 取操作数</span></span><br><span class="line">			vnum2 = self.cmd[vip][<span class="number">2</span>]	<span class="comment"># 取操作数</span></span><br><span class="line">			vfunc = self.serve(vcmd)	<span class="comment"># 取具体函数</span></span><br><span class="line">			vfunc(vnum1, vnum2)	<span class="comment"># 执 ⾏</span></span><br><span class="line">			vip += <span class="number">1</span>	<span class="comment"># 下⼀个指令</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建虚拟机</span></span><br><span class="line">vm = Vm() <span class="comment"># 导⼊指令集</span></span><br><span class="line"><span class="meta">@vm.route(<span class="params"><span class="string">&#x27;vadd&#x27;</span></span>) </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">a,b</span>):</span></span><br><span class="line">	<span class="keyword">if</span> a == <span class="number">1</span>: </span><br><span class="line">		vm.square += b</span><br><span class="line"><span class="meta">@vm.route(<span class="params"><span class="string">&#x27;vprint&#x27;</span></span>) </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">a,b</span>):</span></span><br><span class="line">	<span class="keyword">if</span> a == <span class="number">1</span>: </span><br><span class="line">		<span class="built_in">print</span>(vm._<span class="built_in">input</span>)</span><br><span class="line">    <span class="keyword">elif</span> a == <span class="number">2</span>: </span><br><span class="line">    	<span class="built_in">print</span>(vm.square)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		<span class="built_in">print</span>(a, end=<span class="string">&#x27;&#x27;</span>) </span><br><span class="line"><span class="meta">@vm.route(<span class="params"><span class="string">&#x27;vend&#x27;</span></span>) </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">a,b</span>):</span></span><br><span class="line">	sys.exit() </span><br><span class="line"><span class="meta">@vm.route(<span class="params"><span class="string">&#x27;vinput&#x27;</span></span>) </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">a,b</span>):</span></span><br><span class="line">	vm._<span class="built_in">input</span> = <span class="built_in">input</span>() </span><br><span class="line"><span class="meta">@vm.route(<span class="params"><span class="string">&#x27;vsleep&#x27;</span></span>) def f(<span class="params">a,b</span>):</span></span><br><span class="line">	time.sleep(a) </span><br><span class="line"><span class="meta">@vm.route(<span class="params"><span class="string">&#x27;vcheck1&#x27;</span></span>) </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">a,b</span>):</span></span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(vm._<span class="built_in">input</span>) % <span class="number">2</span> != <span class="number">0</span>: </span><br><span class="line">	sys.exit()</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> vm._<span class="built_in">input</span>:</span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">ord</span>(i) &gt; <span class="number">52</span> <span class="keyword">or</span> <span class="built_in">ord</span>(i) &lt; <span class="number">48</span>: </span><br><span class="line">			sys.exit()</span><br><span class="line"><span class="meta">@vm.route(<span class="params"><span class="string">&#x27;vload&#x27;</span></span>) </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">a,b</span>):</span></span><br><span class="line">	index = <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(vm._<span class="built_in">input</span>), <span class="number">2</span>): </span><br><span class="line">		index += <span class="number">1</span></span><br><span class="line">		a = <span class="built_in">int</span>(vm._<span class="built_in">input</span>[i])</span><br><span class="line">		b = <span class="built_in">int</span>(vm._<span class="built_in">input</span>[i+<span class="number">1</span>]) </span><br><span class="line">		vm.square[a][b] = index</span><br><span class="line"><span class="meta">@vm.route(<span class="params"><span class="string">&#x27;vcheck2&#x27;</span></span>) </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">a,b</span>):</span></span><br><span class="line">	<span class="keyword">if</span> vm.square[<span class="number">0</span>][<span class="number">2</span>] != <span class="number">1</span> <span class="keyword">or</span> vm.square[<span class="number">4</span>][<span class="number">3</span>] != <span class="number">2</span>: </span><br><span class="line">		sys.exit()</span><br><span class="line"><span class="meta">@vm.route(<span class="params"><span class="string">&#x27;vcheck3&#x27;</span></span>) </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">a,b</span>):</span></span><br><span class="line">	tmp = <span class="number">0</span></span><br><span class="line">	<span class="keyword">if</span> b == -<span class="number">1</span>:</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">			tmp += vm.square[a][i] </span><br><span class="line">		<span class="keyword">if</span> tmp != vm.tmp:</span><br><span class="line">			sys.exit() </span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">			tmp += vm.square[i][b] </span><br><span class="line">         <span class="keyword">if</span> tmp != vm.tmp:</span><br><span class="line">			sys.exit()</span><br><span class="line"><span class="comment"># 导⼊指令</span></span><br><span class="line">vm.cmd = [</span><br><span class="line">    [<span class="string">&#x27;vprint&#x27;</span>, <span class="string">&#x27;welcome baby~ &#x27;</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="string">&#x27;vprint&#x27;</span>, <span class="string">&#x27;input your flag~:&#x27;</span>, <span class="number">0</span>], </span><br><span class="line">    [<span class="string">&#x27;vinput&#x27;</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="string">&#x27;vprint&#x27;</span>, <span class="string">&#x27;your input is:&#x27;</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="string">&#x27;vprint&#x27;</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="string">&#x27;vprint&#x27;</span>, <span class="string">&#x27;let\&#x27;s check......&#x27;</span>, <span class="number">0</span>], [<span class="string">&#x27;vsleep&#x27;</span>, <span class="number">0.5</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="string">&#x27;vadd&#x27;</span>, <span class="number">1</span>, [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>)]]],</span><br><span class="line">    [<span class="string">&#x27;vadd&#x27;</span>, <span class="number">1</span>, [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>)]]],</span><br><span class="line">    [<span class="string">&#x27;vadd&#x27;</span>, <span class="number">1</span>, [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>)]]],</span><br><span class="line">    [<span class="string">&#x27;vadd&#x27;</span>, <span class="number">1</span>, [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>)]]],</span><br><span class="line">    [<span class="string">&#x27;vadd&#x27;</span>, <span class="number">1</span>, [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>)]]], [<span class="string">&#x27;vcheck1&#x27;</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="string">&#x27;vload&#x27;</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    <span class="comment"># [&#x27;vprint&#x27;, 2, 0],</span></span><br><span class="line">    [<span class="string">&#x27;vcheck2&#x27;</span>,	<span class="number">0</span>,	<span class="number">0</span>],</span><br><span class="line">    [<span class="string">&#x27;vcheck3&#x27;</span>,	<span class="number">0</span>,	-<span class="number">1</span>],</span><br><span class="line">    [<span class="string">&#x27;vcheck3&#x27;</span>,	<span class="number">1</span>,	-<span class="number">1</span>],</span><br><span class="line">    [<span class="string">&#x27;vcheck3&#x27;</span>,	<span class="number">2</span>,	-<span class="number">1</span>],</span><br><span class="line">    [<span class="string">&#x27;vcheck3&#x27;</span>,	<span class="number">3</span>,	-<span class="number">1</span>],</span><br><span class="line">    [<span class="string">&#x27;vcheck3&#x27;</span>,	<span class="number">4</span>,	-<span class="number">1</span>],</span><br><span class="line">    [<span class="string">&#x27;vcheck3&#x27;</span>,	<span class="number">0</span>,	<span class="number">0</span>],</span><br><span class="line">    [<span class="string">&#x27;vcheck3&#x27;</span>,	<span class="number">0</span>,	<span class="number">1</span>],</span><br><span class="line">    [<span class="string">&#x27;vcheck3&#x27;</span>,	<span class="number">0</span>,	<span class="number">2</span>],</span><br><span class="line">    [<span class="string">&#x27;vcheck3&#x27;</span>,	<span class="number">0</span>,	<span class="number">3</span>],</span><br><span class="line">    [<span class="string">&#x27;vcheck3&#x27;</span>,	<span class="number">0</span>,	<span class="number">4</span>],</span><br><span class="line">    [<span class="string">&#x27;vprint&#x27;</span>, <span class="string">&#x27;Goodjob!&#x27;</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="string">&#x27;vprint&#x27;</span>, <span class="string">&#x27;The flag is vnctf&#123;md5(your input)&#125;!&#x27;</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="string">&#x27;vend&#x27;</span>, <span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line">]</span><br><span class="line">vm.run()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>然后发现其实是⼀个五阶幻⽅，输⼊的是依次填写的坐标： </p>
+<ul>
+<li><p>注：当时出完这个题是有多解的，在公开赛的时候加上了更多约束条件和MD5前⼏位的效验，因此 是单解。 最终输⼊为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">02433420112112034430403122130414004132233324100142</span><br></pre></td></tr></table></figure>
+
+<p>flag:</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">vnctf</span>&#123;e<span class="number">3</span>a<span class="number">912</span>c<span class="number">1</span>e<span class="number">911</span>ad<span class="number">82544</span>af<span class="number">0</span>c<span class="number">3</span>d<span class="number">753</span>f<span class="number">44</span>f&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>做了之后，发现整个人是蒙的，内心极度复杂。需要做的更多的可能是多看看关于python的一些知识。</p>
+<hr>
+<h2 id="FilpGame"><a href="#FilpGame" class="headerlink" title="FilpGame"></a>FilpGame</h2><h3 id="查壳"><a href="#查壳" class="headerlink" title="查壳"></a>查壳</h3><p><img src="http://qiniu.angelsnow.site/20210428200734.png" alt="image-20210428200732547"></p>
+<p>发现没有壳，再放进DIE查一下。</p>
+<p><img src="http://qiniu.angelsnow.site/20210428200838.png" alt="image-20210428200836647"></p>
+<p>好像也没有壳。</p>
+<p>IDA（32）打开，然后左侧看见main（）函数，点一下，然后F5。</p>
+<p>然后一直看着网上这个游戏相关的信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Snow
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://angelsnow1129.github.io/2021/05/10/V-NCTF-RE/" title="V&amp;NCTF-RE">https://angelsnow1129.github.io/2021/05/10/V-NCTF-RE/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">春花秋月，夏荷冬雪。</div>
+    
+</div>
+  
+</div>
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/10/BUUCTF-RE-0x04/" rel="prev" title="BUUCTF-RE-0x04">
+      <i class="fa fa-chevron-left"></i> BUUCTF-RE-0x04
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VNCTF-RE"><span class="nav-number">1.</span> <span class="nav-text">VNCTF-RE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#notsudoku"><span class="nav-number">1.1.</span> <span class="nav-text">notsudoku</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MARK-%E5%86%99%E5%85%B3%E4%BA%8Epyc%E7%9A%84%E4%BD%BF%E7%94%A8%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95"><span class="nav-number">1.1.1.</span> <span class="nav-text">MARK-写关于pyc的使用踩坑记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8E%E9%9D%A2%E7%9A%84%E7%9C%8B%E4%B8%8D%E6%87%82%E4%BA%86%EF%BC%8C%E7%9B%B4%E6%8E%A5%E6%8A%8AWP%E7%B2%98%E8%B4%B4%E5%9C%A8%E4%B8%8B%E9%9D%A2%EF%BC%8C%E7%9C%8B%E4%B8%8D%E6%87%82python%E3%80%82%E3%80%82"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">后面的看不懂了，直接把WP粘贴在下面，看不懂python。。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%98%E6%96%B9WP%EF%BC%9A"><span class="nav-number">1.1.2.</span> <span class="nav-text">官方WP：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">1.1.3.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FilpGame"><span class="nav-number">1.2.</span> <span class="nav-text">FilpGame</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E5%A3%B3"><span class="nav-number">1.2.1.</span> <span class="nav-text">查壳</span></a></li></ol></li></ol></li></ol></div>
+
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow"
+      src="/images/AS.jpg">
+  <p class="site-author-name" itemprop="name">Snow</p>
+  <div class="site-description" itemprop="description">Hope, Marvel, Youth.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    来撩
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/angelsnow1129" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;angelsnow1129" rel="noopener" target="_blank"><i class="fa fa-fw fa-fab fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:angelsnow1129@163.com" title="E-Mail → mailto:angelsnow1129@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+
+  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 src="//music.163.com/outchain/player?type=0&id=6671522046&auto=1&height=90"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow</span>
+</div>
+
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>  
+<br>北岛有诗，南岛有梦。</br>
+
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/18/2021 01:11:29");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="122" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/AS.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/AS.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"angelsnow1129.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="CrackMe160轮流做题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CrackMe160_0x04">
+<meta property="og:url" content="https://angelsnow1129.github.io/2021/05/10/CrackMe160-0x04/index.html">
+<meta property="og:site_name" content="AngelSnow 个人博客">
+<meta property="og:description" content="CrackMe160轮流做题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210504131530.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210504132116.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210504132147.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210504163802.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210504132050.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210504164306.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210504171026.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210504171507.png">
+<meta property="og:image" content="http://qiniu.angelsnow.site/20210504171537.png">
+<meta property="article:published_time" content="2021-05-10T11:55:41.000Z">
+<meta property="article:modified_time" content="2021-05-10T11:56:30.071Z">
+<meta property="article:author" content="Snow">
+<meta property="article:tag" content="算法, 程序开发, 生活, 操作系统, 信息安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://qiniu.angelsnow.site/20210504131530.png">
+
+<link rel="canonical" href="https://angelsnow1129.github.io/2021/05/10/CrackMe160-0x04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CrackMe160_0x04 | AngelSnow 个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+  <!--pjax：防止跳转页面音乐暂停-->
+ <script src="https://cdn.jsdelivr.net/npm/[email protected]/pjax.js"></script>
+ 
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+
+  
+    <script src="/js/cursor/love.min.js"></script>
+  
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AngelSnow 个人博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">真，善，美</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://angelsnow1129.github.io/2021/05/10/CrackMe160-0x04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/AS.jpg">
+      <meta itemprop="name" content="Snow">
+      <meta itemprop="description" content="Hope, Marvel, Youth.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AngelSnow 个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CrackMe160_0x04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-05-10 19:55:41 / 修改时间：19:56:30" itemprop="dateCreated datePublished" datetime="2021-05-10T19:55:41+08:00">2021-05-10</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="热度" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">热度：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="CrackMe160"><a href="#CrackMe160" class="headerlink" title="CrackMe160"></a>CrackMe160</h1><p>轮流做题</p>
+<span id="more"></span>
+
+
+
+<hr>
+<h2 id="18-Brad-Soblesky-1-exe"><a href="#18-Brad-Soblesky-1-exe" class="headerlink" title="18 Brad Soblesky.1.exe"></a>18 <strong>Brad Soblesky.1.exe</strong></h2><h3 id="查壳"><a href="#查壳" class="headerlink" title="查壳"></a>查壳</h3><p><img src="http://qiniu.angelsnow.site/20210504131530.png" alt="image-20210504131528600"></p>
+<p>打开运行试试：</p>
+<p><img src="http://qiniu.angelsnow.site/20210504132116.png" alt="image-20210504132114775"></p>
+<p><img src="http://qiniu.angelsnow.site/20210504132147.png" alt="image-20210504132145383"></p>
+<p>所以发现有弹窗，而且没壳，那我们就可以试着去看看关键的地方。</p>
+<p>然后在里面的时候意外发现了这个：</p>
+<p><img src="http://qiniu.angelsnow.site/20210504163802.png" alt="image-20210504163800200"></p>
+<p><img src="http://qiniu.angelsnow.site/20210504132050.png" alt="image-20210504132048497"></p>
+<p>然后试了一下，好像是的。。。</p>
+<p>注册码就是里面进行比较的一个字符串。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;BrD-SoB&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个在函数里面蹦出来的。</p>
+<p><img src="http://qiniu.angelsnow.site/20210504164306.png" alt="image-20210504164242946"></p>
+<p>函数如下：</p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00401512</span>  /.  <span class="number">55</span>            push ebp</span><br><span class="line"><span class="number">00401513</span>  |.  <span class="number">8</span>BEC          mov ebp,esp</span><br><span class="line"><span class="number">00401515</span>  |.  <span class="number">83</span>EC <span class="number">20</span>       <span class="keyword">sub</span> esp,<span class="number">0</span>x20</span><br><span class="line"><span class="number">00401518</span>  |.  <span class="number">894</span>D E0       mov [local.<span class="number">8</span>],ecx</span><br><span class="line"><span class="number">0040151</span>B  |.  <span class="number">66</span>:A1 <span class="number">5</span>C31400&gt;mov ax,word ptr ds:[<span class="number">0</span>x40315C]</span><br><span class="line"><span class="number">00401521</span>  |.  <span class="number">66</span>:<span class="number">8945</span> F4    mov word ptr ss:[ebp-<span class="number">0</span>xC],ax</span><br><span class="line"><span class="number">00401525</span>  |.  <span class="number">33</span>C9          <span class="built_in">xor</span> ecx,ecx</span><br><span class="line"><span class="number">00401527</span>  |.  <span class="number">894</span>D F6       mov dword ptr ss:[ebp-<span class="number">0</span>xA],ecx</span><br><span class="line"><span class="number">0040152</span>A  |.  <span class="number">894</span>D FA       mov dword ptr ss:[ebp-<span class="number">0</span>x6],ecx</span><br><span class="line"><span class="number">0040152</span>D  |.  <span class="number">8</span>B15 <span class="number">20304000</span> mov edx,dword ptr ds:[<span class="number">0</span>x403020]</span><br><span class="line"><span class="number">00401533</span>  |.  <span class="number">8955</span> E4       mov [local.<span class="number">7</span>],edx</span><br><span class="line"><span class="number">00401536</span>  |.  A1 <span class="number">24304000</span>   mov eax,dword ptr ds:[<span class="number">0</span>x403024]</span><br><span class="line"><span class="number">0040153</span>B  |.  <span class="number">8945</span> E8       mov [local.<span class="number">6</span>],eax</span><br><span class="line"><span class="number">0040153</span>E  |.  <span class="number">66</span>:<span class="number">8</span>B0D <span class="number">28304</span>&gt;mov cx,word ptr ds:[<span class="number">0</span>x403028]</span><br><span class="line"><span class="number">00401545</span>  |.  <span class="number">66</span>:<span class="number">894</span>D EC    mov word ptr ss:[ebp-<span class="number">0</span>x14],cx</span><br><span class="line"><span class="number">00401549</span>  |.  <span class="number">6</span>A <span class="number">0</span>A         push <span class="number">0</span>xA</span><br><span class="line"><span class="number">0040154</span>B  |.  <span class="number">8</span>D55 F4       lea edx,[local.<span class="number">3</span>]</span><br><span class="line"><span class="number">0040154</span>E  |.  <span class="number">52</span>            push edx</span><br><span class="line"><span class="number">0040154</span>F  |.  <span class="number">68</span> E8030000   push <span class="number">0</span>x3E8</span><br><span class="line"><span class="number">00401554</span>  |.  <span class="number">8</span>B4D E0       mov ecx,[local.<span class="number">8</span>]</span><br><span class="line"><span class="number">00401557</span>  |.  E8 A8050000   <span class="keyword">call</span> &lt;jmp.&amp;MFC42.#CWnd::GetDlgItemTextA_&gt;</span><br><span class="line"><span class="number">0040155</span>C  |.  <span class="number">8</span>D45 F4       lea eax,[local.<span class="number">3</span>]</span><br><span class="line"><span class="number">0040155</span>F  |.  <span class="number">50</span>            push eax                                 ; /<span class="type">String</span> = <span class="number">00000005</span> ???</span><br><span class="line"><span class="number">00401560</span>  |.  FF15 <span class="number">04204000</span> <span class="keyword">call</span> dword ptr ds:[&lt;&amp;KERNEL32.lstrlenA&gt;] ; \lstrlenA</span><br><span class="line"><span class="number">00401566</span>  |.  <span class="number">8945</span> F0       mov [local.<span class="number">4</span>],eax</span><br><span class="line"><span class="number">00401569</span>  |.  <span class="number">837</span>D F0 <span class="number">01</span>    cmp [local.<span class="number">4</span>],<span class="number">0</span>x1</span><br><span class="line"><span class="number">0040156</span>D  |.  <span class="number">73</span> <span class="number">16</span>         jnb <span class="type">short</span> Brad_Sob.<span class="number">00401585</span></span><br><span class="line"><span class="number">0040156</span>F  |.  <span class="number">6</span>A <span class="number">40</span>         push <span class="number">0</span>x40</span><br><span class="line"><span class="number">00401571</span>  |.  <span class="number">68</span> <span class="number">2</span>C304000   push Brad_Sob.<span class="number">0040302</span>C                   ;  ASCII <span class="string">&quot;CrackMe&quot;</span></span><br><span class="line"><span class="number">00401576</span>  |.  <span class="number">68</span> <span class="number">34304000</span>   push Brad_Sob.<span class="number">00403034</span>                   ;  ASCII <span class="string">&quot;Enter Registration Number&quot;</span></span><br><span class="line"><span class="number">0040157</span>B  |.  <span class="number">8</span>B4D E0       mov ecx,[local.<span class="number">8</span>]</span><br><span class="line"><span class="number">0040157</span>E  |.  E8 <span class="number">7</span>B050000   <span class="keyword">call</span> &lt;jmp.&amp;MFC42.#CWnd::MessageBoxA_4224&gt;</span><br><span class="line"><span class="number">00401583</span>  |.  EB <span class="number">3</span>C         jmp <span class="type">short</span> Brad_Sob.<span class="number">004015</span>C1</span><br><span class="line"><span class="number">00401585</span>  |&gt;  <span class="number">8</span>D4D E4       lea ecx,[local.<span class="number">7</span>]</span><br><span class="line"><span class="number">00401588</span>  |.  <span class="number">51</span>            push ecx                                 ; /String2 = <span class="string">&quot;&lt;BrD-SoB&gt;&quot;</span></span><br><span class="line"><span class="number">00401589</span>  |.  <span class="number">8</span>D55 F4       lea edx,[local.<span class="number">3</span>]                        ; |</span><br><span class="line"><span class="number">0040158</span>C  |.  <span class="number">52</span>            push edx                                 ; |String1 = <span class="string">&quot;1212&quot;</span></span><br><span class="line"><span class="number">0040158</span>D  |.  FF15 <span class="number">00204000</span> <span class="keyword">call</span> dword ptr ds:[&lt;&amp;KERNEL32.lstrcmpA&gt;] ; \lstrcmpA</span><br><span class="line"><span class="number">00401593</span>  |.  <span class="number">85</span>C0          test eax,eax</span><br><span class="line"><span class="number">00401595</span>      <span class="number">75</span> <span class="number">16</span>         jnz <span class="type">short</span> Brad_Sob.<span class="number">004015</span>AD</span><br><span class="line"><span class="number">00401597</span>  |.  <span class="number">6</span>A <span class="number">40</span>         push <span class="number">0</span>x40</span><br><span class="line"><span class="number">00401599</span>  |.  <span class="number">68</span> <span class="number">50304000</span>   push Brad_Sob.<span class="number">00403050</span>                   ;  ASCII <span class="string">&quot;CrackMe&quot;</span></span><br><span class="line"><span class="number">0040159</span>E  |.  <span class="number">68</span> <span class="number">58304000</span>   push Brad_Sob.<span class="number">00403058</span>                   ;  ASCII <span class="string">&quot;Correct way to go!!&quot;</span></span><br><span class="line"><span class="number">004015</span>A3  |.  <span class="number">8</span>B4D E0       mov ecx,[local.<span class="number">8</span>]</span><br><span class="line"><span class="number">004015</span>A6  |.  E8 <span class="number">53050000</span>   <span class="keyword">call</span> &lt;jmp.&amp;MFC42.#CWnd::MessageBoxA_4224&gt;</span><br><span class="line"><span class="number">004015</span>AB  |.  EB <span class="number">14</span>         jmp <span class="type">short</span> Brad_Sob.<span class="number">004015</span>C1</span><br><span class="line"><span class="number">004015</span>AD  |&gt;  <span class="number">6</span>A <span class="number">40</span>         push <span class="number">0</span>x40</span><br><span class="line"><span class="number">004015</span>AF  |.  <span class="number">68</span> <span class="number">6</span>C304000   push Brad_Sob.<span class="number">0040306</span>C                   ;  ASCII <span class="string">&quot;CrackMe&quot;</span></span><br><span class="line"><span class="number">004015</span>B4  |.  <span class="number">68</span> <span class="number">74304000</span>   push Brad_Sob.<span class="number">00403074</span>                   ;  ASCII <span class="string">&quot;Incorrect try again!!&quot;</span></span><br><span class="line"><span class="number">004015</span>B9  |.  <span class="number">8</span>B4D E0       mov ecx,[local.<span class="number">8</span>]</span><br><span class="line"><span class="number">004015</span>BC  |.  E8 <span class="number">3</span>D050000   <span class="keyword">call</span> &lt;jmp.&amp;MFC42.#CWnd::MessageBoxA_4224&gt;</span><br><span class="line"><span class="number">004015</span>C1  |&gt;  <span class="number">8</span>BE5          mov esp,ebp</span><br><span class="line"><span class="number">004015</span>C3  |.  <span class="number">5</span>D            pop ebp                                  ;  <span class="number">0019</span>FE34</span><br><span class="line"><span class="number">004015</span>C4  \.  C3            retn</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这个就有点没想到了。hhh</p>
+<hr>
+<h2 id="19-Brad-Soblesky-2"><a href="#19-Brad-Soblesky-2" class="headerlink" title="19 Brad Soblesky.2"></a>19 Brad Soblesky.2</h2><h3 id="查壳-1"><a href="#查壳-1" class="headerlink" title="查壳"></a>查壳</h3><p><img src="http://qiniu.angelsnow.site/20210504171026.png" alt="image-20210504171025127"></p>
+<p>没有发现壳的踪迹，运行试试。</p>
+<p><img src="http://qiniu.angelsnow.site/20210504171507.png" alt="image-20210504171506717"></p>
+<p><img src="http://qiniu.angelsnow.site/20210504171537.png" alt="image-20210504171533589"></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Snow
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://angelsnow1129.github.io/2021/05/10/CrackMe160-0x04/" title="CrackMe160_0x04">https://angelsnow1129.github.io/2021/05/10/CrackMe160-0x04/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">春花秋月，夏荷冬雪。</div>
+    
+</div>
+  
+</div>
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/04/ISCC2021-WP/" rel="prev" title="ISCC2021-WP">
+      <i class="fa fa-chevron-left"></i> ISCC2021-WP
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/10/BUUCTF-RE-0x04/" rel="next" title="BUUCTF-RE-0x04">
+      BUUCTF-RE-0x04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CrackMe160"><span class="nav-number">1.</span> <span class="nav-text">CrackMe160</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#18-Brad-Soblesky-1-exe"><span class="nav-number">1.1.</span> <span class="nav-text">18 Brad Soblesky.1.exe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E5%A3%B3"><span class="nav-number">1.1.1.</span> <span class="nav-text">查壳</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#19-Brad-Soblesky-2"><span class="nav-number">1.2.</span> <span class="nav-text">19 Brad Soblesky.2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E5%A3%B3-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">查壳</span></a></li></ol></li></ol></li></ol></div>
+
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow"
+      src="/images/AS.jpg">
+  <p class="site-author-name" itemprop="name">Snow</p>
+  <div class="site-description" itemprop="description">Hope, Marvel, Youth.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    来撩
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/angelsnow1129" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;angelsnow1129" rel="noopener" target="_blank"><i class="fa fa-fw fa-fab fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:angelsnow1129@163.com" title="E-Mail → mailto:angelsnow1129@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+
+  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 src="//music.163.com/outchain/player?type=0&id=6671522046&auto=1&height=90"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow</span>
+</div>
+
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>  
+<br>北岛有诗，南岛有梦。</br>
+
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/18/2021 01:11:29");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="122" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>
