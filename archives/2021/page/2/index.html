@@ -20,30 +20,18 @@
     var CONFIG = {"hostname":"angelsnow1129.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="前10个CrackMe的练习，在备份系统时没有备份好。所以吧，决定就不重新写了暂时，有时间再写吧，因为几乎就是那样一步步来学习着使用OD和IDA，所以吧，对于我来说还是很重要的。而后面的也不是特别的难，主要是找迷宫一样的，找到&#x3D;&#x3D;关键的跳转&#x3D;&#x3D;（大佬们都叫做&#x3D;&#x3D;关键跳&#x3D;&#x3D;）。然后再去完成就好了，虽然现在还是读不懂汇编，也看不太懂各个程序的结构。加油学习吧，累了就去学web方面的题目。嘿嘿，靥。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CrackMe160-0x02">
-<meta property="og:url" content="https://angelsnow1129.github.io/2021/04/25/CrackMe160-0x02/index.html">
+  <meta name="description" content="Hope, Marvel, Youth.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AngelSnow 个人博客">
+<meta property="og:url" content="https://angelsnow1129.github.io/archives/2021/page/2/index.html">
 <meta property="og:site_name" content="AngelSnow 个人博客">
-<meta property="og:description" content="前10个CrackMe的练习，在备份系统时没有备份好。所以吧，决定就不重新写了暂时，有时间再写吧，因为几乎就是那样一步步来学习着使用OD和IDA，所以吧，对于我来说还是很重要的。而后面的也不是特别的难，主要是找迷宫一样的，找到&#x3D;&#x3D;关键的跳转&#x3D;&#x3D;（大佬们都叫做&#x3D;&#x3D;关键跳&#x3D;&#x3D;）。然后再去完成就好了，虽然现在还是读不懂汇编，也看不太懂各个程序的结构。加油学习吧，累了就去学web方面的题目。嘿嘿，靥。">
+<meta property="og:description" content="Hope, Marvel, Youth.">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://qiniu.angelsnow.site/image-20210423110545222.png">
-<meta property="og:image" content="http://qiniu.angelsnow.site/image-20210423165706163.png">
-<meta property="og:image" content="http://qiniu.angelsnow.site/image-20210423162935481.png">
-<meta property="og:image" content="http://qiniu.angelsnow.site/image-20210423162600698.png">
-<meta property="og:image" content="http://qiniu.angelsnow.site/image-20210423163932385.png">
-<meta property="og:image" content="http://qiniu.angelsnow.site/image-20210423164457554.png">
-<meta property="og:image" content="http://qiniu.angelsnow.site/image-20210423165247182.png">
-<meta property="og:image" content="http://qiniu.angelsnow.site/image-20210423170215173.png">
-<meta property="og:image" content="http://qiniu.angelsnow.site/image-20210423172008854.png">
-<meta property="article:published_time" content="2021-04-25T05:11:14.000Z">
-<meta property="article:modified_time" content="2021-04-25T06:17:10.478Z">
 <meta property="article:author" content="Snow">
 <meta property="article:tag" content="算法, 程序开发, 生活, 操作系统, 信息安全">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://qiniu.angelsnow.site/image-20210423110545222.png">
 
-<link rel="canonical" href="https://angelsnow1129.github.io/2021/04/25/CrackMe160-0x02/">
+<link rel="canonical" href="https://angelsnow1129.github.io/archives/2021/page/2/">
 
 
 <script id="page-configurations">
@@ -51,12 +39,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : true,
+    isPost : false,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>CrackMe160-0x02 | AngelSnow 个人博客</title>
+  <title>归档 | AngelSnow 个人博客</title>
   
 
 
@@ -179,152 +167,114 @@
         <div class="content-wrap">
           
 
-          <div class="content post posts-expand">
+          <div class="content archive">
             
 
-    
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://angelsnow1129.github.io/2021/04/25/CrackMe160-0x02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/AS.jpg">
-      <meta itemprop="name" content="Snow">
-      <meta itemprop="description" content="Hope, Marvel, Youth.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="AngelSnow 个人博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          CrackMe160-0x02
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-04-25 13:11:14 / 修改时间：14:17:10" itemprop="dateCreated datePublished" datetime="2021-04-25T13:11:14+08:00">2021-04-25</time>
-            </span>
-
-          
-            <span class="post-meta-item" title="热度" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="eye"></i>
-              </span>
-              <span class="post-meta-item-text">热度：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <span class="collection-header">嗯..! 目前共计 14 篇日志。 继续努力。</span>
+      </div>
 
       
-        <p>前10个CrackMe的练习，在备份系统时没有备份好。所以吧，决定就不重新写了暂时，有时间再写吧，因为几乎就是那样一步步来学习着使用OD和IDA，所以吧，对于我来说还是很重要的。而后面的也不是特别的难，主要是找迷宫一样的，找到==关键的跳转==（大佬们都叫做==关键跳==）。然后再去完成就好了，虽然现在还是读不懂汇编，也看不太懂各个程序的结构。加油学习吧，累了就去学web方面的题目。嘿嘿，靥。</p>
-  <span id="more"></span>
-
-<h1 id="CrackMe-012-attackiko-（16位NT，难）"><a href="#CrackMe-012-attackiko-（16位NT，难）" class="headerlink" title="CrackMe 012 attackiko （16位NT，难）"></a>CrackMe 012 attackiko （16位NT，难）</h1><p>难度：♥♥♥♥♥</p>
-<img src="http://qiniu.angelsnow.site/image-20210423110545222.png" alt="image-20210423110545222"  />
-
-<p>在找了很久的方法之后，这个简直了。</p>
-<p>按照的是查壳，反汇编，但是首先就看不出汇编代码，其次更加神奇的是这是个16位的NT应用程序，用IDA32位的可以看到一部分。</p>
-<p>然后硬看了一会儿汇编，决定看看大佬的方法。</p>
-<p>一看发现这道题的算法是真的很不简单。</p>
-<p>以下是查看的资料，自己还是看不完汇编。</p>
-<p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-367672-1-1.html">解题的思路</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-906688-1-1.html">52pj-详细解答，完全过程</a></p>
-<h1 id="CM013-badboy"><a href="#CM013-badboy" class="headerlink" title="CM013 - badboy"></a>CM013 - badboy</h1><h2 id="破解过程："><a href="#破解过程：" class="headerlink" title="破解过程："></a>破解过程：</h2><p>破解这道题主要是靠着看大佬的方法，使用了相关的工具在程序运行时自己断下。然后在堆栈里一眼看见了需要的注册码。</p>
-<img src="http://qiniu.angelsnow.site/image-20210423165706163.png" alt="image-20210423165706163" style="zoom:80%;" />
-
-<p><img src="http://qiniu.angelsnow.site/image-20210423162935481.png" alt="image-20210423162935481"></p>
-<p>然后将堆栈里的输入进入Serial：就行了。而第二个就运行失败，不知道怎么回事。</p>
-<p><img src="http://qiniu.angelsnow.site/image-20210423162600698.png" alt="image-20210423162600698"></p>
-<p>运行第二个CrackMe的时候就这样了。。</p>
-<p><img src="http://qiniu.angelsnow.site/image-20210423163932385.png" alt="image-20210423163932385"></p>
-<p>于是重新下载了一次，然后再次使用工具来下断点。</p>
-<p><img src="http://qiniu.angelsnow.site/image-20210423164457554.png" alt="image-20210423164457554"></p>
-<p>同样是在堆栈找到的注册码。</p>
-<p>然后将Serial换成堆栈的那个，再次F9，在提交，然后在F9就可以了。</p>
-<p><img src="http://qiniu.angelsnow.site/image-20210423165247182.png" alt="image-20210423165247182"></p>
-<p>整个题目对于个人来说讲的是对于VB语言的了解。</p>
-<h2 id="参考的资料："><a href="#参考的资料：" class="headerlink" title="参考的资料："></a>参考的资料：</h2><p>1.<a target="_blank" rel="noopener" href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=619202">大佬的解题方法</a></p>
-<p>2.<a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-452085-1-1.html">通过反汇编VB语言，然后来分析</a></p>
-<p>3.<a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-619539-1-1.html">反汇编后具体分析</a></p>
-<h1 id="CM014-bjanes-1"><a href="#CM014-bjanes-1" class="headerlink" title="CM014 bjanes.1"></a>CM014 bjanes.1</h1><h2 id="破解过程"><a href="#破解过程" class="headerlink" title="破解过程"></a>破解过程</h2><p>因为现在不会写注册机，所以只是进行爆破，然后在破解成功后，查看别人的破解方法进行学习。</p>
-<h2 id="查壳"><a href="#查壳" class="headerlink" title="查壳"></a>查壳</h2><p>  无壳的32位应用。</p>
-<p><img src="http://qiniu.angelsnow.site/image-20210423170215173.png" alt="image-20210423170215173"></p>
-<p>然后先打开应用，发现会有弹窗。而对于弹窗，一般都是保留着弹窗，然后暂停去查看堆栈的情况。然后寻找蛛丝马迹进行爆破。</p>
-<p>果不其然，在堆栈里看见最后面那个地址感觉就极为的亲切，说明这道题应该不是特别的难。而且不用脱壳就能够完成。</p>
-<p>然后查看附近的汇编代码，可以看出来，就是会有两个失败的弹窗以及两个成功的弹窗来说明成功或者是失败。</p>
-<p>所以前往上方代码去查看是否有需要更改的地方，发现一处跳转是跳转到成功的地方的。</p>
-<h2 id="最后的成果"><a href="#最后的成果" class="headerlink" title="最后的成果"></a>最后的成果</h2><p><img src="http://qiniu.angelsnow.site/image-20210423172008854.png" alt="image-20210423172008854"></p>
-
+    <div class="collection-year">
+      <span class="collection-header">2021</span>
     </div>
 
-    
-    
-    
-        
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>Snow
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="https://angelsnow1129.github.io/2021/04/25/CrackMe160-0x02/" title="CrackMe160-0x02">https://angelsnow1129.github.io/2021/04/25/CrackMe160-0x02/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2021-04-25T13:13:52+08:00"
+              content="2021-04-25">
+          04-25
+        </time>
+      </div>
 
+      <div class="post-title">
+          <a class="post-title-link" href="/2021/04/25/BUUCTF-RE-0x02/" itemprop="url">
+            <span itemprop="name">BUUCTF-RE-0x02</span>
+          </a>
+      </div>
 
-<div>
-  
-    <div>
-    
-        <div style="text-align:center;color: #ccc;font-size:14px;">春花秋月，夏荷冬雪。</div>
-    
-</div>
-  
-</div>
-
-      <footer class="post-footer">
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2021/04/21/%E5%9C%A8%E8%BF%99%E4%B8%AA%E6%80%80%E7%96%91%E7%9A%84%E6%97%B6%E4%BB%A3%EF%BC%8C%E6%88%91%E4%BB%AC%E4%BE%9D%E7%84%B6%E9%9C%80%E8%A6%81%E4%BF%A1%E4%BB%B0/" rel="prev" title="在这个怀疑的时代，我们依然需要信仰">
-      <i class="fa fa-chevron-left"></i> 在这个怀疑的时代，我们依然需要信仰
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/04/25/BUUCTF-RE-0x02/" rel="next" title="BUUCTF-RE-0x02">
-      BUUCTF-RE-0x02 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
+    </header>
   </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2021-04-25T13:11:14+08:00"
+              content="2021-04-25">
+          04-25
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2021/04/25/CrackMe160-0x02/" itemprop="url">
+            <span itemprop="name">CrackMe160-0x02</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2021-04-21T13:52:11+08:00"
+              content="2021-04-21">
+          04-21
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2021/04/21/%E5%9C%A8%E8%BF%99%E4%B8%AA%E6%80%80%E7%96%91%E7%9A%84%E6%97%B6%E4%BB%A3%EF%BC%8C%E6%88%91%E4%BB%AC%E4%BE%9D%E7%84%B6%E9%9C%80%E8%A6%81%E4%BF%A1%E4%BB%B0/" itemprop="url">
+            <span itemprop="name">在这个怀疑的时代，我们依然需要信仰</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2021-04-18T21:35:27+08:00"
+              content="2021-04-18">
+          04-18
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2021/04/18/hello-world/" itemprop="url">
+            <span itemprop="name">Hello World</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+
+    </div>
+  </div>
   
   
   
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/archives/2021/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/archives/2021/">1</a><span class="page-number current">2</span>
+  </nav>
 
 
 
@@ -377,7 +327,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CrackMe-012-attackiko-%EF%BC%8816%E4%BD%8DNT%EF%BC%8C%E9%9A%BE%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">CrackMe 012 attackiko （16位NT，难）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CM013-badboy"><span class="nav-number">2.</span> <span class="nav-text">CM013 - badboy</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%B4%E8%A7%A3%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">破解过程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E7%9A%84%E8%B5%84%E6%96%99%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">参考的资料：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CM014-bjanes-1"><span class="nav-number">3.</span> <span class="nav-text">CM014 bjanes.1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%B4%E8%A7%A3%E8%BF%87%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">破解过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E5%A3%B3"><span class="nav-number">3.2.</span> <span class="nav-text">查壳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E7%9A%84%E6%88%90%E6%9E%9C"><span class="nav-number">3.3.</span> <span class="nav-text">最后的成果</span></a></li></ol></li></ol></div>
 
       </div>
       <!--/noindex-->

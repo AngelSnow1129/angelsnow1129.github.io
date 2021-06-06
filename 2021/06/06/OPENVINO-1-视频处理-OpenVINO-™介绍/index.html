@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/AS.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/AS.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"angelsnow1129.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="第一章：视频处理 &amp; OpenVINO ™介绍 看见的OPENVIONO的课程，积累一下，希望在做不出CTF能够找点思路。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OPENVINO-1:视频处理 &amp; OpenVINO ™介绍">
+<meta property="og:url" content="https://angelsnow1129.github.io/2021/06/06/OPENVINO-1-%E8%A7%86%E9%A2%91%E5%A4%84%E7%90%86-OpenVINO-%E2%84%A2%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="AngelSnow 个人博客">
+<meta property="og:description" content="第一章：视频处理 &amp; OpenVINO ™介绍 看见的OPENVIONO的课程，积累一下，希望在做不出CTF能够找点思路。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/83af7bf1-de26-47a1-9527-1dec142e767f">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/1907f300-fd29-4b14-b36f-8d3135e5d8aa">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/850993af-8ad8-4f80-9a94-930b02c04386">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/10ff3411-125c-484e-8b5c-65791401bda7">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/321389d0-c4a3-4d62-ba13-93ce34c62230">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/044500df-36ca-4b1f-be09-ecdb9f8a9c1b">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/b588c03b-0fbf-45f3-8e20-9531d368e551">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/7e17c8b0-407d-4813-b97f-0d8252c69553">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/93c9444c-bd6d-4d6d-aec8-0fe3299dba32">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/7680c997-c5b4-4094-b3d8-a1842f20de65">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/719e3d27-d171-44d2-8a8b-7ad1c085d8af">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/60913b68-3469-4379-a0ee-0f1409536a8d">
+<meta property="og:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/f77a507d-c904-4421-871c-6804ed644750">
+<meta property="article:published_time" content="2021-06-06T13:21:07.000Z">
+<meta property="article:modified_time" content="2021-06-06T13:24:28.392Z">
+<meta property="article:author" content="Snow">
+<meta property="article:tag" content="算法, 程序开发, 生活, 操作系统, 信息安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://angelsnow1129.github.io/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/83af7bf1-de26-47a1-9527-1dec142e767f">
+
+<link rel="canonical" href="https://angelsnow1129.github.io/2021/06/06/OPENVINO-1-%E8%A7%86%E9%A2%91%E5%A4%84%E7%90%86-OpenVINO-%E2%84%A2%E4%BB%8B%E7%BB%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OPENVINO-1:视频处理 & OpenVINO ™介绍 | AngelSnow 个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+  <!--pjax：防止跳转页面音乐暂停-->
+ <script src="https://cdn.jsdelivr.net/npm/[email protected]/pjax.js"></script>
+ 
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+
+  
+    <script src="/js/cursor/love.min.js"></script>
+  
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AngelSnow 个人博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">真，善，美</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://angelsnow1129.github.io/2021/06/06/OPENVINO-1-%E8%A7%86%E9%A2%91%E5%A4%84%E7%90%86-OpenVINO-%E2%84%A2%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/AS.jpg">
+      <meta itemprop="name" content="Snow">
+      <meta itemprop="description" content="Hope, Marvel, Youth.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AngelSnow 个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OPENVINO-1:视频处理 & OpenVINO ™介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-06 21:21:07 / 修改时间：21:24:28" itemprop="dateCreated datePublished" datetime="2021-06-06T21:21:07+08:00">2021-06-06</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="热度" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">热度：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>第一章：视频处理 &amp; OpenVINO ™介绍</p>
+<p>看见的OPENVIONO的课程，积累一下，希望在做不出CTF能够找点思路。</p>
+<span id="more"></span>
+
+<h1 id="练习1-人脸识别初体验"><a href="#练习1-人脸识别初体验" class="headerlink" title="练习1:人脸识别初体验"></a>练习1:人脸识别初体验</h1><h5 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h5><p>本实验所有代码均在ubuntu18.04 + OpenVINO 2020R3.LTS installed 环境下验证通过，若需要代码移植，请务必检查环境配置是否与本实验环境相同。</p>
+<h5 id="实验目的"><a href="#实验目的" class="headerlink" title="实验目的"></a>实验目的</h5><h5 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h5><p>实验环境信息如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th align="left">设备名称</th>
+<th align="left">软件环境</th>
+<th align="left">硬件环境</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">主机</td>
+<td align="left">Ubuntu 18.04 OpenVINO 2020.0319桌面版</td>
+<td align="left">CPU：2核 内存：4G 磁盘：40G</td>
+</tr>
+</tbody></table>
+<p>注：系统默认的账户为用户名：root，密码：root<a target="_blank" rel="noopener" href="https://github.com/openlab">@openlab</a>；用户名：openlab，密码：user@openlab。</p>
+<h5 id="任务内容"><a href="#任务内容" class="headerlink" title="任务内容"></a>任务内容</h5><p>1、学习OpenVINO的基本知识，包括OpenVINO的作用、特性和工作原理等。<br>2、基于深度学习模型进行简单的人脸识别处理。</p>
+<h5 id="实验原理"><a href="#实验原理" class="headerlink" title="实验原理"></a>实验原理</h5><h2 id="一、OpenVINO概述"><a href="#一、OpenVINO概述" class="headerlink" title="一、OpenVINO概述"></a>一、OpenVINO概述</h2><p>OpenVINO（Open Visual Inferencing and Neural Network Optimization，开放视觉推理和神经网络优化）是英特尔基于自身现有的硬件平台开发的一种可以加快高性能计算机视觉和深度学习视觉应用开发速度的工具套件，它支持Intel CPU、GPU、FPGA和Movidius计算棒等多种设备。OpenVINO发布至今，虽然只有短短几年时间，但市场上已有数千个开发人员，数百家公司和数十款产品在使用。它广受欢迎主要有四个原因：</p>
+<p><strong>- 简单</strong><br>OpenVINO非常简单，只需十行代码即可执行推理。并且它具有足够的灵活性，可以支持批处理异步执行等功能。</p>
+<p><strong>- 性能</strong><br>OpenVINO有时可将推理速度提高两倍。并将内存消耗降低五倍，具体取决于硬件型号、平台等因素。接下来的实验充分体现了OpenVINO在这方面的优异表现。</p>
+<p><strong>- 可移植性</strong><br>推理引擎允许用户在英特尔的不同平台上运行几乎相同的代码。这有助于所有英特尔平台使用相同的代码，可以节省大量时间。在新设备推出时，可以快速将原有代码移植到新设备上，实现产品的快速升级。</p>
+<p><strong>- 全面性</strong><br>它可以充分支持客户的完整设计流程。英特尔将为他们提供所有可能需要的工具。</p>
+<h2 id="二、OpenVINO组件"><a href="#二、OpenVINO组件" class="headerlink" title="二、OpenVINO组件"></a>二、OpenVINO组件</h2><p>从Intel的官方文档了解到，OpenVINO工具包包含下列组件：<br><strong>1. DLDT（Deep Learning Deployment Toolkit，深度学习部署工具包）</strong><br>DLDT是OpenVINO的核心，内部又包含如下内容：</p>
+<ul>
+<li><p><strong>深度学习模型优化器</strong>（Deep Learning Model Optimizer）</p>
+<p>一种跨平台的命令行工具，用于导入模型并为推理引擎优化执行将要使用的模型。模型优化器会导入、转换、优化模型，这些模型在流行的框架中训练，比如 Caffe<em>、TensorFlow</em>、MXNet<em>、Kaldi</em> 和 ONNX*。</p>
+</li>
+<li><p><strong>深度学习推断引擎</strong>（Deep Learning Inference Engine）<br>一个统一的API，可在多种硬件类型（包括英特尔® CPU、英特尔® 集成显卡、英特尔® 神经电脑棒，搭载英特尔® Movidius™ 视觉处理器(VPU)的英特尔® Vision Accelerator Design）上进行高性能推理。</p>
+</li>
+<li><p><strong>推理引擎样本</strong><br>一套简单的控制台应用程序，展示了如何在应用程序中使用推理引擎。</p>
+</li>
+<li><p><strong>工具</strong>（Tools）<br>一套模型协作的工具，包括准确度检查器实用程序、训练后优化工具指南、模型下载器等。</p>
+</li>
+</ul>
+<p><strong>2. 开放预训练模型（Open Model Zoo）</strong><br>是Intel的计算机视觉工具箱中提供的预训练模型，用于学习和演示目的的预训练模型。这些模型已经优化过，可以直接拿来用于加速产品开发与部署。</p>
+<ul>
+<li><strong>深度学习流媒体播放器</strong>（DL Streamer）<br>基于GStreamer，在构建媒体分析组件图时流式加载分析框架。DL Streamer可以通过英特尔® Distribution of OpenVINO™工具套件安装程序安装。</li>
+<li><strong>OpenCV</strong><br>为英特尔®硬件编译的OpenCV社区版本，包括用于计算机视觉的PVL库。</li>
+<li><strong>OpenCL</strong><br>全称Open Computing Language即开放计算语言。OpenCL为异构平台提供了一个编写程序，尤其是并行程序的开放的框架标准。OpenCL所支持的异构平台可由多核CPU、GPU或其他类型的处理器组成。提供Intel驱动程序和运行时程序。</li>
+<li><strong>OpenVX</strong><br>针对在英特尔®硬件（CPU，GPU，IPU）上运行而优化的OpenVX 。</li>
+</ul>
+<h2 id="三、OpenVINO工作流程"><a href="#三、OpenVINO工作流程" class="headerlink" title="三、OpenVINO工作流程"></a>三、OpenVINO工作流程</h2><p>OpenVINO工具包的主要组件是DLDT，DLDT主要包括模型优化器和推理引擎两部分。模型优化器负责将各种格式的深度神经网络模型转换成统一的自定义格式，并在转换过程中进行模型优化；推理引擎接受经过模型优化器转换并优化的网络模型，为Intel的各种计算设备提供高性能的神经网络推理运算。使用DLDT进行神经网络模型的部署，典型工作流程如图所示。<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/83af7bf1-de26-47a1-9527-1dec142e767f" alt="img"><br>1.训练一个DLDT支持的深度网络模型（Train a Model），如：TensorFlow、Caffe、MaxNet等。</p>
+<p>2.用模型优化器（Model Optimizer）对网络模型行编译和优化（Run Model Optimizer），生成Openvino IR（Intermediate Representation，中间表示）格式的网络配置文件（.xml文件）和模型参数文件（.bin文件）；</p>
+<p>3.调用推理引擎（Inference Engine）进行网络运算，其结果和应用程序（User Application）进行交互。</p>
+<h2 id="四、人脸识别实验流程"><a href="#四、人脸识别实验流程" class="headerlink" title="四、人脸识别实验流程"></a>四、人脸识别实验流程</h2><p>1.第一步是获取一个可执行面部检测的深度学习模型。该模型可以检测输入图像中的面部信息。</p>
+<p>2.然后需要定义哪个设备来运行推理，如CPU集成显卡，FPGA或其他。</p>
+<p>3.下一步是读取图像。</p>
+<p>4.接下来对图像进行推理准备，主要是调整其大小，以适合深度学习神经网络的输入维度。</p>
+<p>5.然后运行推理并获得结果。</p>
+<p>6.然后在检测到的面部上画框。</p>
+<p>7.最后将图像保存到文件中。</p>
+<p>代码实现如下图所示。<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/1907f300-fd29-4b14-b36f-8d3135e5d8aa" alt="img"></p>
+<h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><h3 id="步骤1"><a href="#步骤1" class="headerlink" title="步骤1"></a>步骤1</h3><p>登录实验平台，进入实验环境并打开终端。</p>
+<h3 id="步骤2"><a href="#步骤2" class="headerlink" title="步骤2"></a>步骤2</h3><p>执行命令<code>su</code>，输入root用户密码root<a target="_blank" rel="noopener" href="https://github.com/openlab">@openlab</a>，切换到root目录。</p>
+<h3 id="步骤3"><a href="#步骤3" class="headerlink" title="步骤3"></a>步骤3</h3><p>执行命令<code>cd ~/51openlab/01/exercise-1/</code>，进入exercise-1目录。</p>
+<h3 id="步骤4"><a href="#步骤4" class="headerlink" title="步骤4"></a>步骤4</h3><p>执行如下命令，初始化OpenVINO工具套件。<br><code># source /opt/intel/openvino/bin/setupvars.sh</code></p>
+<h3 id="步骤5"><a href="#步骤5" class="headerlink" title="步骤5"></a>步骤5</h3><p>执行<code>eog faces.jpg</code>命令，查看需要识别的图片，如下图所示。<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/850993af-8ad8-4f80-9a94-930b02c04386" alt="img"></p>
+<h3 id="步骤6"><a href="#步骤6" class="headerlink" title="步骤6"></a>步骤6</h3><p>执行<code>vi face-detection.py</code>命令，查看人脸识别的相关脚本，具体如下所示。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Copyright (C) 2018-2020 Intel Corporation</span></span><br><span class="line"><span class="comment"># SPDX-License-Identifier : Apache-2.0</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load the model</span></span><br><span class="line">net = cv.dnn.readNet(<span class="string">&#x27;face-detection-adas-0001.xml&#x27;</span>, <span class="string">&#x27;face-detection-adas-0001.bin&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Specify target device (CPU)</span></span><br><span class="line">net.setPreferableTarget(cv.dnn.DNN_TARGET_CPU)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Read an image</span></span><br><span class="line">frame = cv.imread(<span class="string">&#x27;faces.jpg&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Prepare input blob </span></span><br><span class="line">blob = cv.dnn.blobFromImage(frame, size=(<span class="number">672</span>, <span class="number">384</span>), ddepth=cv.CV_8U)</span><br><span class="line"></span><br><span class="line"><span class="comment">#perform inference (face detection)</span></span><br><span class="line">net.setInput(blob)</span><br><span class="line">out = net.forward()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Draw detected faces on the frame</span></span><br><span class="line"><span class="keyword">for</span> detection <span class="keyword">in</span> out.reshape(-<span class="number">1</span>, <span class="number">7</span>):</span><br><span class="line"></span><br><span class="line">    confidence = <span class="built_in">float</span>(detection[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">    xmin = <span class="built_in">int</span>(detection[<span class="number">3</span>] * frame.shape[<span class="number">1</span>])</span><br><span class="line">    ymin = <span class="built_in">int</span>(detection[<span class="number">4</span>] * frame.shape[<span class="number">0</span>])</span><br><span class="line">    xmax = <span class="built_in">int</span>(detection[<span class="number">5</span>] * frame.shape[<span class="number">1</span>])</span><br><span class="line">    ymax = <span class="built_in">int</span>(detection[<span class="number">6</span>] * frame.shape[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> confidence &gt; <span class="number">0.5</span>:</span><br><span class="line">        cv.rectangle(frame, (xmin, ymin), (xmax, ymax), color=(<span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Save the frame to an image file</span></span><br><span class="line"></span><br><span class="line">cv.imwrite(<span class="string">&#x27;out.png&#x27;</span>, frame)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤7"><a href="#步骤7" class="headerlink" title="步骤7"></a>步骤7</h3><p>执行<code>python3 face-detection.py</code>命令，运行脚本。</p>
+<h3 id="步骤8"><a href="#步骤8" class="headerlink" title="步骤8"></a>步骤8</h3><p>执行<code>eog out.png</code>命令查看输出结果，如下图所示。<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/10ff3411-125c-484e-8b5c-65791401bda7" alt="img"><br>由上图可知，有些面部比较远，或者被其它面部所遮挡，所以并非所有的面部都被检测到。任务二介绍如何识别更多的人脸。</p>
+<h3 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h3><p>课程章节</p>
+<p>  登录用户名：openlab   密码：user@openlab</p>
+<hr>
+<h1 id="练习2：如何识别更多的人脸"><a href="#练习2：如何识别更多的人脸" class="headerlink" title="练习2：如何识别更多的人脸"></a>练习2：如何识别更多的人脸</h1><h5 id="说明-1"><a href="#说明-1" class="headerlink" title="说明"></a>说明</h5><p>本实验所有代码均在ubuntu 18.04 + OpenVINO 2020R3.LTS installed 环境下验证通过，若需要代码移植，请务必检查环境配置是否与本实验环境相同。</p>
+<h5 id="实验目的-1"><a href="#实验目的-1" class="headerlink" title="实验目的"></a>实验目的</h5><p>1、了解如何下载并查看不同模型的输入输出参数的方法。<br>2、掌握基于深度学习模型的人脸识别的具体代码实现。</p>
+<h5 id="任务内容-1"><a href="#任务内容-1" class="headerlink" title="任务内容"></a>任务内容</h5><p>1、下载并查看不同模型的输入输出参数。<br>2、基于深度学习模型进行更多人脸的识别处理。</p>
+<h5 id="实验原理-1"><a href="#实验原理-1" class="headerlink" title="实验原理"></a>实验原理</h5><p>这个实验和上节实验其实使用的是同一套代码，只是检测阈值不一样。下面对代码进行详细解读。</p>
+<p><strong>1.读取模型</strong>。具体代码如下：<img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/321389d0-c4a3-4d62-ba13-93ce34c62230" alt="img"></p>
+<p>本实验中已经提供了人脸识别模型face-detection-adas-0001。所有预训练模型的描述都可以在<a target="_blank" rel="noopener" href="https://software.intel.com/en-us/openvino-toolkit/documentation/pretrained-models">https://software.intel.com/en-us/openvino-toolkit/documentation/pretrained-models</a> 下找到，比如年龄和性别识别、文本检测和面部检测等。</p>
+<p>本实验用到的是标准模型，在模型页面可以看到face-detection-adas-0001这个模型的描述、参数列表、输入和输出的描述。模型下载成功后包括两个文件，即二进制.bin文件和.xml，使用“netron”应用查看xml文件，此时可以看到完整的网络。还可以看到输入大小是1x3x384x672。在下一项目中，将详细介绍如何从OpenVINO Model Zoo和公共存储库中获取模型。</p>
+<p><strong>2.指定网络在CPU上运行</strong> 。具体代码如下：<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/044500df-36ca-4b1f-be09-ecdb9f8a9c1b" alt="img"><br>将首选目标设备设置为CPU，也可以是英特尔集成显卡、基于Movidius的VPU加速设备、FPGA等。</p>
+<p><strong>3.图像读入“frame”变量</strong>。具体代码如下：<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/b588c03b-0fbf-45f3-8e20-9531d368e551" alt="img"><br>使用cv2.imread读取图像，读取格式是BGR格式。</p>
+<p><strong>4.对图像进行推理准备。</strong><br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/7e17c8b0-407d-4813-b97f-0d8252c69553" alt="img"><br>该图像将以一定大小和数据格式的“blob”格式输入，OpenCV函数blob-from-Image将调整图像的大小，大小的顺序是先宽后高。</p>
+<p><strong>5.运行推理</strong>。<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/93c9444c-bd6d-4d6d-aec8-0fe3299dba32" alt="img"></p>
+<p>将blob指定为网络输入，接着执行“forward”函数，这代表执行net对象的推理操作，推理结果将存储在“out”变量中。</p>
+<p>6.在检测到的面部上画框。<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/7680c997-c5b4-4094-b3d8-a1842f20de65" alt="img"><br>“out”对象变换为Nx7尺寸的向量，其中“N”表示面部的数量，然后提取每个检测到的面部的坐标即矩形角的x、y坐标，然后根据原始图像尺寸调整坐标大小，如果自信度高于0.5，我们将在检测到的面部周围绘制一个矩形。</p>
+<p>7.将结果文件写入图像。<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/719e3d27-d171-44d2-8a8b-7ad1c085d8af" alt="img"></p>
+<h2 id="操作步骤-1"><a href="#操作步骤-1" class="headerlink" title="操作步骤"></a>操作步骤</h2><h3 id="步骤1-1"><a href="#步骤1-1" class="headerlink" title="步骤1"></a>步骤1</h3><p>登录实验平台，进入实验环境并打开终端。</p>
+<h3 id="步骤2-1"><a href="#步骤2-1" class="headerlink" title="步骤2"></a>步骤2</h3><p>执行命令<code>su</code>，输入root用户密码root<a target="_blank" rel="noopener" href="https://github.com/openlab">@openlab</a>，切换到root目录。</p>
+<h3 id="步骤3-1"><a href="#步骤3-1" class="headerlink" title="步骤3"></a>步骤3</h3><p>执行命令<code>cd ~/51openlab/01/exercise-2/</code>，进入exercise-2目录。</p>
+<h3 id="步骤4-1"><a href="#步骤4-1" class="headerlink" title="步骤4"></a>步骤4</h3><p>执行如下命令，初始化OpenVINO工具套件。<br><code># source /opt/intel/openvino/bin/setupvars.sh</code></p>
+<h3 id="步骤5-1"><a href="#步骤5-1" class="headerlink" title="步骤5"></a>步骤5</h3><p>执行<code>eog faces.jpg</code>命令，查看需要识别的图片，如下图所示。<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/60913b68-3469-4379-a0ee-0f1409536a8d" alt="img"></p>
+<h3 id="步骤6-1"><a href="#步骤6-1" class="headerlink" title="步骤6"></a>步骤6</h3><p>执行<code>vi face-detection.py</code>命令，编辑python脚本，将原脚本中if confidence &gt; 0.5修改成if confidence &gt; 0.2，并保存退出，如下所示。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   <span class="attribute">if</span> confidence &gt; <span class="number">0</span>.<span class="number">2</span>:</span><br><span class="line">            <span class="attribute">cv</span>.rectangle(frame, (xmin, ymin), (xmax, ymax), color=(<span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Save the frame to an image file</span></span><br><span class="line"><span class="attribute">cv</span>.imwrite(&#x27;out.png&#x27;, frame)</span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤7-1"><a href="#步骤7-1" class="headerlink" title="步骤7"></a>步骤7</h3><p>执行<code>python3 face-detection.py</code>命令，运行脚本。</p>
+<h3 id="步骤8-1"><a href="#步骤8-1" class="headerlink" title="步骤8"></a>步骤8</h3><p>执行<code>eog out.png</code>命令打开新输出的图像，如下图所示。<br><img src="../../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/f77a507d-c904-4421-871c-6804ed644750" alt="img"><br>由上图可以看出，之前任务一没被识别的人脸现在被识别了。下面介绍如何在此基础上继续识别出他们的年龄和性别。</p>
+<h1 id="END"><a href="#END" class="headerlink" title="END"></a>END</h1>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Snow
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://angelsnow1129.github.io/2021/06/06/OPENVINO-1-%E8%A7%86%E9%A2%91%E5%A4%84%E7%90%86-OpenVINO-%E2%84%A2%E4%BB%8B%E7%BB%8D/" title="OPENVINO-1:视频处理 &amp; OpenVINO ™介绍">https://angelsnow1129.github.io/2021/06/06/OPENVINO-1-视频处理-OpenVINO-™介绍/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">春花秋月，夏荷冬雪。</div>
+    
+</div>
+  
+</div>
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/06/06/BUUCTF-RE-0x05/" rel="prev" title="BUUCTF-RE-0x05">
+      <i class="fa fa-chevron-left"></i> BUUCTF-RE-0x05
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%83%E4%B9%A01-%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB%E5%88%9D%E4%BD%93%E9%AA%8C"><span class="nav-number">1.</span> <span class="nav-text">练习1:人脸识别初体验</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AF%B4%E6%98%8E"><span class="nav-number">1.0.0.0.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84"><span class="nav-number">1.0.0.0.2.</span> <span class="nav-text">实验目的</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83"><span class="nav-number">1.0.0.0.3.</span> <span class="nav-text">实验环境</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E5%86%85%E5%AE%B9"><span class="nav-number">1.0.0.0.4.</span> <span class="nav-text">任务内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%8E%9F%E7%90%86"><span class="nav-number">1.0.0.0.5.</span> <span class="nav-text">实验原理</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81OpenVINO%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">一、OpenVINO概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81OpenVINO%E7%BB%84%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text">二、OpenVINO组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81OpenVINO%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">三、OpenVINO工作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB%E5%AE%9E%E9%AA%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.4.</span> <span class="nav-text">四、人脸识别实验流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.5.</span> <span class="nav-text">操作步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A41"><span class="nav-number">1.5.1.</span> <span class="nav-text">步骤1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A42"><span class="nav-number">1.5.2.</span> <span class="nav-text">步骤2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A43"><span class="nav-number">1.5.3.</span> <span class="nav-text">步骤3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A44"><span class="nav-number">1.5.4.</span> <span class="nav-text">步骤4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A45"><span class="nav-number">1.5.5.</span> <span class="nav-text">步骤5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A46"><span class="nav-number">1.5.6.</span> <span class="nav-text">步骤6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A47"><span class="nav-number">1.5.7.</span> <span class="nav-text">步骤7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A48"><span class="nav-number">1.5.8.</span> <span class="nav-text">步骤8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="nav-number">1.5.9.</span> <span class="nav-text">结果分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%83%E4%B9%A02%EF%BC%9A%E5%A6%82%E4%BD%95%E8%AF%86%E5%88%AB%E6%9B%B4%E5%A4%9A%E7%9A%84%E4%BA%BA%E8%84%B8"><span class="nav-number">2.</span> <span class="nav-text">练习2：如何识别更多的人脸</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AF%B4%E6%98%8E-1"><span class="nav-number">2.0.0.0.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84-1"><span class="nav-number">2.0.0.0.2.</span> <span class="nav-text">实验目的</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E5%86%85%E5%AE%B9-1"><span class="nav-number">2.0.0.0.3.</span> <span class="nav-text">任务内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%8E%9F%E7%90%86-1"><span class="nav-number">2.0.0.0.4.</span> <span class="nav-text">实验原理</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4-1"><span class="nav-number">2.1.</span> <span class="nav-text">操作步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A41-1"><span class="nav-number">2.1.1.</span> <span class="nav-text">步骤1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A42-1"><span class="nav-number">2.1.2.</span> <span class="nav-text">步骤2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A43-1"><span class="nav-number">2.1.3.</span> <span class="nav-text">步骤3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A44-1"><span class="nav-number">2.1.4.</span> <span class="nav-text">步骤4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A45-1"><span class="nav-number">2.1.5.</span> <span class="nav-text">步骤5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A46-1"><span class="nav-number">2.1.6.</span> <span class="nav-text">步骤6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A47-1"><span class="nav-number">2.1.7.</span> <span class="nav-text">步骤7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A48-1"><span class="nav-number">2.1.8.</span> <span class="nav-text">步骤8</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#END"><span class="nav-number">3.</span> <span class="nav-text">END</span></a></li></ol></div>
+
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow"
+      src="/images/AS.jpg">
+  <p class="site-author-name" itemprop="name">Snow</p>
+  <div class="site-description" itemprop="description">Hope, Marvel, Youth.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    来撩
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/angelsnow1129" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;angelsnow1129" rel="noopener" target="_blank"><i class="fa fa-fw fa-fab fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:angelsnow1129@163.com" title="E-Mail → mailto:angelsnow1129@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+
+  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 src="//music.163.com/outchain/player?type=0&id=6671522046&auto=1&height=90"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow</span>
+</div>
+
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>  
+<br>北岛有诗，南岛有梦。</br>
+
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/18/2021 01:11:29");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="122" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>
