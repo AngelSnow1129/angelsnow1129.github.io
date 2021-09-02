@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/AS.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/AS.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"angelsnow1129.github","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="寻思有什么可以像三星的 Samsung Flow 的手机所类似的手机解锁电脑软件，然后可以解决忘记电脑密码的的尴尬。然后就在晚上看看有什么解决方法，在论坛找到了用 手机指纹解锁电脑的软件 —— Remote Fingerprint Unlock。具体的通过百度就可以找到。 然后呢，逛了一圈发现了 SAASPASS 的玩意，这个好像也行，不过还没有实测过。 然后继续发现了好像挺多的感应都是基于蓝牙来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手机指纹解锁电脑的小玩意">
+<meta property="og:url" content="https://angelsnow1129.github/2021/09/02/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/index.html">
+<meta property="og:site_name" content="AngelSnow 个人博客">
+<meta property="og:description" content="寻思有什么可以像三星的 Samsung Flow 的手机所类似的手机解锁电脑软件，然后可以解决忘记电脑密码的的尴尬。然后就在晚上看看有什么解决方法，在论坛找到了用 手机指纹解锁电脑的软件 —— Remote Fingerprint Unlock。具体的通过百度就可以找到。 然后呢，逛了一圈发现了 SAASPASS 的玩意，这个好像也行，不过还没有实测过。 然后继续发现了好像挺多的感应都是基于蓝牙来">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330072757.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330072843.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330074154.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330074208.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330074238.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330073444.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330073415.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330073738.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330073835.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330073850.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330074428.png">
+<meta property="og:image" content="https://jimszack.github.io/.io//C:%5CUsers%5C94927%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210330074632296.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330074830.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330075254-163057838835988.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330075352.png">
+<meta property="og:image" content="https://jimszack.github.io/.io//C:%5CUsers%5C94927%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210330080432796.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330080535.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330080728.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330080900.png">
+<meta property="og:image" content="https://jimszack.github.io/.io//C:%5CUsers%5C94927%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210330081006699.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330081258.png">
+<meta property="og:image" content="https://jimszack.github.io/.io//C:%5CUsers%5C94927%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210330081523438.png">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330081648-163057841553896.png">
+<meta property="article:published_time" content="2021-09-02T10:22:14.000Z">
+<meta property="article:modified_time" content="2021-09-02T10:28:19.927Z">
+<meta property="article:author" content="Snow">
+<meta property="article:tag" content="整活">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://angelsnow1129.github/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330072757.png">
+
+<link rel="canonical" href="https://angelsnow1129.github/2021/09/02/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>手机指纹解锁电脑的小玩意 | AngelSnow 个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+  <!--pjax：防止跳转页面音乐暂停-->
+ <script src="https://cdn.jsdelivr.net/npm/[email protected]/pjax.js"></script>
+ 
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+
+  
+    <script src="/js/cursor/love.min.js"></script>
+  
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AngelSnow 个人博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">真，善，美</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://angelsnow1129.github/2021/09/02/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/AS.jpg">
+      <meta itemprop="name" content="Snow">
+      <meta itemprop="description" content="Hope, Marvel, Youth.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AngelSnow 个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          手机指纹解锁电脑的小玩意
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-09-02 18:22:14 / 修改时间：18:28:19" itemprop="dateCreated datePublished" datetime="2021-09-02T18:22:14+08:00">2021-09-02</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="热度" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">热度：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>寻思有什么可以像三星的 Samsung Flow 的手机所类似的手机解锁电脑软件，然后可以解决忘记电脑密码的的尴尬。然后就在晚上看看有什么解决方法，在论坛找到了用 手机指纹解锁电脑的软件 —— Remote Fingerprint Unlock。具体的通过百度就可以找到。</p>
+<p>然后呢，逛了一圈发现了 SAASPASS 的玩意，这个好像也行，不过还没有实测过。</p>
+<p>然后继续发现了好像挺多的感应都是基于蓝牙来进行解锁的，所以如果没有打开蓝牙还忘了密码，那就只有清除密码或是绝活了。</p>
+<span id="more"></span>
+
+
+
+<h1 id="手机指纹解锁电脑的小玩意"><a href="#手机指纹解锁电脑的小玩意" class="headerlink" title="手机指纹解锁电脑的小玩意"></a>手机指纹解锁电脑的小玩意</h1><h2 id="环境："><a href="#环境：" class="headerlink" title="环境："></a>环境：</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">windos <span class="number">10</span>-<span class="number">20</span>H2 家庭教育版，Android <span class="number">10</span>,</span><br><span class="line">以及所需要的文件：</span><br><span class="line">链接：https:<span class="comment">//wwe.lanzoui.com/b016ad7be</span></span><br><span class="line">密码: <span class="number">48</span>p8</span><br><span class="line">（下载好 ro<span class="selector-class">.andreimircius</span><span class="selector-class">.remotefingerauth</span>.apk（手机下载） 和 finger_unlock_1.<span class="number">2.0</span>.exe（电脑下载） 文件即可）</span><br></pre></td></tr></table></figure>
+
+<h2 id="开整："><a href="#开整：" class="headerlink" title="开整："></a>开整：</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>手机安装过程如图：下载过后，打开安装包进行安装</p>
+<p><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330072757.png" alt="Screenshot_20210330_070724"></p>
+<p><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330072843.png" alt="image-20210330072841764"></p>
+<p>然后这就安装完成了。打开软件即可。下面开始安装电脑端的软件。</p>
+<p><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330074154.png" alt="Screenshot_20210330_070810"><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330074208.png" alt="Screenshot_20210330_070813"><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330074238.png" alt="Screenshot_20210330_070824"></p>
+<p>这样就进入软件了。</p>
+<p>电脑安装一直点击下一步，一直到安装完成。</p>
+<p>第一步：</p>
+<p><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330073444.png" alt="image-20210330071747220"></p>
+<p>第二步：</p>
+<p><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330073415.png" alt="image-20210330071811045"></p>
+<p>第三步：</p>
+<p><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330073738.png" alt="image-20210330071849674"></p>
+<p>第四步：点击 Finish 就安装好了电脑端的了。</p>
+<p>第五步进入锁屏界面：</p>
+<p><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330073835.png" alt="image-20210330071916072"><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330073850.png" alt="image-20210330071942334"></p>
+<p>就可以进入下面的匹配了。</p>
+<h3 id="配对"><a href="#配对" class="headerlink" title="配对"></a>配对</h3><p> 注意：在配对的时候，应当让Windows 电脑进入锁屏页面（快捷键 Win（那个四个小方格的按键） + L ）</p>
+<p> 首先，需要我们将电脑进入锁屏等待的界面。（因为电脑锁屏无法截图了，所以锁屏的截图界面来自虚拟机。）</p>
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">虚拟机没有Win <span class="number">10</span>的配置，所以使用的是<span class="literal">Win7</span>，就当有一点点的差别吧。</span><br><span class="line">	因为不可能总是开着蓝牙的，所以想的是用局域网来处理，因为锁屏的时候也可以打开局域网，但是不能打开蓝牙。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330074428.png" alt="image-20210330074418948"><img src="https://jimszack.github.io/.io//C:%5CUsers%5C94927%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210330074632296.png" alt="image-20210330074632296"><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330074830.png" alt="image-20210330074822496"></p>
+<p><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330075254-163057838835988.png" alt="image-20210330075248327"><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330075352.png" alt="image-20210330075348059"><img src="https://jimszack.github.io/.io//C:%5CUsers%5C94927%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210330080432796.png" alt="image-20210330080432796"></p>
+<p><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330080535.png" alt="image-20210330080526635"><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330080728.png" alt="image-20210330080723872"><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330080900.png" alt="image-20210330080855354"></p>
+<p><img src="https://jimszack.github.io/.io//C:%5CUsers%5C94927%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210330081006699.png" alt="image-20210330081006699"><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330081258.png" alt="image-20210330081253151"><img src="https://jimszack.github.io/.io//C:%5CUsers%5C94927%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210330081523438.png" alt="image-20210330081523438"><img src="/images/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/20210330081648-163057841553896.png" alt="image-20210330081618444"></p>
+<p>然后验证你的指纹后，你就可以开锁了。这个方法可以使你在电脑没开蓝牙的时候，可以将电脑和手机连接在同一个局域网下面，然后打开你的电脑，反正也就是将你的密码用另外一种方式保存了。</p>
+<h1 id="详细见："><a href="#详细见：" class="headerlink" title="详细见："></a>详细见：</h1><p>吾爱论坛1： <a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1125666-1-1.html">转发蓝鲸（@巴黎小雨）汉化【手机解锁电脑】Remote Fingerprint Unlock 1.4.1汉化版</a></p>
+<p>吾爱论坛2： [<a target="_blank" rel="noopener" href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=814408&page=1">Android汉化] 【手机解锁电脑】Remote Fingerprint Unlock 1.0.2汉化版</a></p>
+<p>CSDN ：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42118716/article/details/106265994">小米手环4解锁 Windows10</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Snow
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://angelsnow1129.github/2021/09/02/%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F/" title="手机指纹解锁电脑的小玩意">https://angelsnow1129.github/2021/09/02/手机指纹解锁电脑的小玩意/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">春花秋月，夏荷冬雪。</div>
+    
+</div>
+  
+</div>
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B4%E6%B4%BB/" rel="tag"><i class="fa fa-tag"></i> 整活</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/02/%E6%9A%91%E5%81%87%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/" rel="prev" title="暑假学习笔记2">
+      <i class="fa fa-chevron-left"></i> 暑假学习笔记2
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/02/VM%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%BF%9D%E6%8A%A4/" rel="next" title="VM虚拟机保护">
+      VM虚拟机保护 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E6%9C%BA%E6%8C%87%E7%BA%B9%E8%A7%A3%E9%94%81%E7%94%B5%E8%84%91%E7%9A%84%E5%B0%8F%E7%8E%A9%E6%84%8F"><span class="nav-number">1.</span> <span class="nav-text">手机指纹解锁电脑的小玩意</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">环境：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%95%B4%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">开整：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E5%AF%B9"><span class="nav-number">1.2.2.</span> <span class="nav-text">配对</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E8%A7%81%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">详细见：</span></a></li></ol></div>
+
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow"
+      src="/images/AS.jpg">
+  <p class="site-author-name" itemprop="name">Snow</p>
+  <div class="site-description" itemprop="description">Hope, Marvel, Youth.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    来撩
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/angelsnow1129" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;angelsnow1129" rel="noopener" target="_blank"><i class="fa fa-fw fa-fab fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:angelsnow1129@163.com" title="E-Mail → mailto:angelsnow1129@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      友链
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://panda0s.top/" title="https:&#x2F;&#x2F;panda0s.top&#x2F;" rel="noopener" target="_blank">pamda0s</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://s1lenc3-chenmo.github.io/" title="https:&#x2F;&#x2F;s1lenc3-chenmo.github.io&#x2F;" rel="noopener" target="_blank">s1lenc3</a>
+        </li>
+    </ul>
+  </div>
+
+
+  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 src="//music.163.com/outchain/player?type=0&id=6671522046&auto=1&height=90"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow</span>
+</div>
+
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>  
+<br>北岛有诗，南岛有梦。</br>
+
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/18/2021 01:11:29");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>
