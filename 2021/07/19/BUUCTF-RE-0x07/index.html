@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/AS.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/AS.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"angelsnow1129.github","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="刷题记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUCTF-RE-0x07">
+<meta property="og:url" content="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/index.html">
+<meta property="og:site_name" content="AngelSnow 个人博客">
+<meta property="og:description" content="刷题记录">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://angelsnow1129.github/images/BUUCTF-RE-0x07/image-20210711211555359.png">
+<meta property="og:image" content="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/images/BUUCTF-RE-0x07/image-20210719150757871.png">
+<meta property="og:image" content="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/images/BUUCTF-RE-0x07/image-20210719150923775.png">
+<meta property="og:image" content="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/images/BUUCTF-RE-0x07/image-20210719151103242.png">
+<meta property="og:image" content="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/images/BUUCTF-RE-0x07/image-20210719151150702.png">
+<meta property="og:image" content="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/images/BUUCTF-RE-0x07/image-20210719151330404.png">
+<meta property="og:image" content="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/images/BUUCTF-RE-0x07/image-20210719151840489.png">
+<meta property="og:image" content="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/images/BUUCTF-RE-0x07/image-20210719152032009.png">
+<meta property="og:image" content="e:/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/image-20210701181006272.png">
+<meta property="og:image" content="e:/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/image-20210701181359242.png">
+<meta property="og:image" content="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/images/BUUCTF-RE-0x07/image-20210701181432462.png">
+<meta property="og:image" content="https://angelsnow1129.github/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/image-20210719155921836.png">
+<meta property="article:published_time" content="2021-07-19T07:51:45.000Z">
+<meta property="article:modified_time" content="2021-09-02T09:55:29.457Z">
+<meta property="article:author" content="Snow">
+<meta property="article:tag" content="算法, 程序开发, 生活, 操作系统, 信息安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://angelsnow1129.github/images/BUUCTF-RE-0x07/image-20210711211555359.png">
+
+<link rel="canonical" href="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>BUUCTF-RE-0x07 | AngelSnow 个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+  <!--pjax：防止跳转页面音乐暂停-->
+ <script src="https://cdn.jsdelivr.net/npm/[email protected]/pjax.js"></script>
+ 
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+
+  
+    <script src="/js/cursor/love.min.js"></script>
+  
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AngelSnow 个人博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">真，善，美</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/AS.jpg">
+      <meta itemprop="name" content="Snow">
+      <meta itemprop="description" content="Hope, Marvel, Youth.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AngelSnow 个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BUUCTF-RE-0x07
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-19 15:51:45" itemprop="dateCreated datePublished" datetime="2021-07-19T15:51:45+08:00">2021-07-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-02 17:55:29" itemprop="dateModified" datetime="2021-09-02T17:55:29+08:00">2021-09-02</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="热度" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">热度：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>刷题记录</p>
+<span id="more"></span>
+
+<h2 id="GWCTF-2019-xxor"><a href="#GWCTF-2019-xxor" class="headerlink" title="[GWCTF 2019]xxor"></a>[GWCTF 2019]xxor</h2><p>下载后：</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>在其他的地方看见的终于看懂了的。</p>
+<p>整个主函数的反汇编的结果：</p>
+<h3 id="主函数"><a href="#主函数" class="headerlink" title="主函数"></a>主函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__int64 __fastcall <span class="title">main</span><span class="params">(<span class="keyword">int</span> a1, <span class="keyword">char</span> **a2, <span class="keyword">char</span> **a3)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> i; <span class="comment">// [rsp+8h] [rbp-68h]</span></span><br><span class="line">  <span class="keyword">int</span> j; <span class="comment">// [rsp+Ch] [rbp-64h]</span></span><br><span class="line">  __int64 v6[<span class="number">6</span>]; <span class="comment">// [rsp+10h] [rbp-60h] BYREF</span></span><br><span class="line">  __int64 v7[<span class="number">6</span>]; <span class="comment">// [rsp+40h] [rbp-30h] BYREF</span></span><br><span class="line"></span><br><span class="line">  v7[<span class="number">5</span>] = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;Let us play a game?&quot;</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;you have six chances to input&quot;</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;Come on!&quot;</span>);</span><br><span class="line">  <span class="built_in">memset</span>(v6, <span class="number">0</span>, <span class="number">40</span>);</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">5</span>; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>, <span class="string">&quot;input: &quot;</span>);</span><br><span class="line">    a2 = (<span class="keyword">char</span> **)((<span class="keyword">char</span> *)v6 + <span class="number">4</span> * i);</span><br><span class="line">    __isoc99_scanf(<span class="string">&quot;%d&quot;</span>, a2);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">memset</span>(v7, <span class="number">0</span>, <span class="number">40</span>);</span><br><span class="line">  <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt;= <span class="number">2</span>; ++j )</span><br><span class="line">  &#123;</span><br><span class="line">    dword_601078 = v6[j];</span><br><span class="line">    dword_60107C = <span class="built_in">HIDWORD</span>(v6[j]);              <span class="comment">// 高字节</span></span><br><span class="line">    a2 = (<span class="keyword">char</span> **)&amp;unk_601060;</span><br><span class="line">    <span class="built_in">sub_400686</span>(&amp;dword_601078, &amp;unk_601060);</span><br><span class="line">    <span class="built_in">LODWORD</span>(v7[j]) = dword_601078;</span><br><span class="line">    <span class="built_in">HIDWORD</span>(v7[j]) = dword_60107C;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( (<span class="keyword">unsigned</span> <span class="keyword">int</span>)<span class="built_in">sub_400770</span>(v7, a2) != <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;NO NO NO~ &quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;Congratulation!\n&quot;</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;You seccess half\n&quot;</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;Do not forget to change input to hex and combine~\n&quot;</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;ByeBye&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0LL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后发现需要的分析的有两个函数， ==sub_400686(&amp;dword_601078, &amp;unk_601060);== 和 ==sub_400770(v7, a2)== </p>
+<p>然后其中有个小细节困扰了我很久，发现是疑似小端存储的问题。不过还是不是很懂。</p>
+<p>不懂的地方如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt;= <span class="number">2</span>; ++j )</span><br><span class="line">&#123;</span><br><span class="line">  dword_601078 = v6[j];</span><br><span class="line">  dword_60107C = <span class="built_in">HIDWORD</span>(v6[j]);              <span class="comment">// 高字节</span></span><br><span class="line">  a2 = (<span class="keyword">char</span> **)&amp;unk_601060;</span><br><span class="line">  <span class="built_in">sub_400686</span>(&amp;dword_601078, &amp;unk_601060);</span><br><span class="line">  <span class="built_in">LODWORD</span>(v7[j]) = dword_601078;</span><br><span class="line">  <span class="built_in">HIDWORD</span>(v7[j]) = dword_60107C;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/BUUCTF-RE-0x07/image-20210711211555359.png" alt="image-20210711211555359"></p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">变量<span class="built_in">v3</span>、<span class="built_in">v4</span>分别为每组的第<span class="number">1</span>、<span class="number">2</span>个字符，在这里进行了十分令人作呕的算术操作（x在这里所传入的参数<span class="built_in">a2</span>为bss段上变量，按dword来读的话应该是一个数组[<span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]（小端序）：</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="函数1"><a href="#函数1" class="headerlink" title="函数1"></a>函数1</h3><p>这个函数经过分析发现，是用来异或运算的，在查看其他的WP时发现大家<strong>使用 ==Z3== 运算</strong>。表示不是很懂</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__int64 __fastcall <span class="title">sub_400686</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> *a1, _DWORD *a2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  __int64 result; <span class="comment">// rax</span></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> v3; <span class="comment">// [rsp+1Ch] [rbp-24h]</span></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> v4; <span class="comment">// [rsp+20h] [rbp-20h]</span></span><br><span class="line">  <span class="keyword">int</span> v5; <span class="comment">// [rsp+24h] [rbp-1Ch]</span></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> i; <span class="comment">// [rsp+28h] [rbp-18h]</span></span><br><span class="line"></span><br><span class="line">  v3 = *a1;</span><br><span class="line">  v4 = a1[<span class="number">1</span>];</span><br><span class="line">  v5 = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">0x3F</span>; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    v5 += <span class="number">1166789954</span>;</span><br><span class="line">    v3 += (v4 + v5 + <span class="number">11</span>) ^ ((v4 &lt;&lt; <span class="number">6</span>) + *a2) ^ ((v4 &gt;&gt; <span class="number">9</span>) + a2[<span class="number">1</span>]) ^ <span class="number">0x20</span>;</span><br><span class="line">    v4 += (v3 + v5 + <span class="number">20</span>) ^ ((v3 &lt;&lt; <span class="number">6</span>) + a2[<span class="number">2</span>]) ^ ((v3 &gt;&gt; <span class="number">9</span>) + a2[<span class="number">3</span>]) ^ <span class="number">0x10</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  *a1 = v3;</span><br><span class="line">  result = v4;</span><br><span class="line">  a1[<span class="number">1</span>] = v4;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="函数2"><a href="#函数2" class="headerlink" title="函数2"></a>函数2</h3><p>事实证明，我也就做得出这个了，hhhhh~~~</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__int64 __fastcall <span class="title">sub_400770</span><span class="params">(_DWORD *a1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> ( a1[<span class="number">2</span>] - a1[<span class="number">3</span>] == <span class="number">2225223423LL</span></span><br><span class="line">    &amp;&amp; a1[<span class="number">3</span>] + a1[<span class="number">4</span>] == <span class="number">4201428739LL</span></span><br><span class="line">    &amp;&amp; a1[<span class="number">2</span>] - a1[<span class="number">4</span>] == <span class="number">1121399208LL</span></span><br><span class="line">    &amp;&amp; *a1 == <span class="number">-548868226</span></span><br><span class="line">    &amp;&amp; a1[<span class="number">5</span>] == <span class="number">-2064448480</span></span><br><span class="line">    &amp;&amp; a1[<span class="number">1</span>] == <span class="number">550153460</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;good!&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1LL</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Wrong!&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0LL</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> enc[<span class="number">6</span>] = &#123;<span class="number">3746099070</span>, <span class="number">550153460</span>, <span class="number">3774025685</span>, <span class="number">1548802262</span>, <span class="number">2652626477</span>, <span class="number">2230518816</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> a2[<span class="number">4</span>] = &#123;<span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> val = <span class="number">0x40</span> * <span class="number">1166789954</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; <span class="number">6</span>; i+=<span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> v5 = val;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> v3 = enc[i], v4 = enc[i + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt; <span class="number">0x40</span>; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            v4 -= (v3 + v5 + <span class="number">20</span>) ^ ((v3 &lt;&lt; <span class="number">6</span>) + a2[<span class="number">2</span>]) ^ ((v3 &gt;&gt; <span class="number">9</span>) + a2[<span class="number">3</span>]) ^ <span class="number">0x10</span>;</span><br><span class="line">            v3 -= (v4 + v5 + <span class="number">11</span>) ^ ((v4 &lt;&lt; <span class="number">6</span>) + *a2) ^ ((v4 &gt;&gt; <span class="number">9</span>) + a2[<span class="number">1</span>]) ^ <span class="number">0x20</span>;</span><br><span class="line">            v5 -= <span class="number">1166789954</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        enc[i] = v3;</span><br><span class="line">        enc[i + <span class="number">1</span>] = v4;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; <span class="number">6</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\&#x27;0x%x\&#x27;, &quot;</span>, enc[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将16进制转化为字符</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">flag = [<span class="string">&#x27;0x666c61&#x27;</span>, <span class="string">&#x27;0x677b72&#x27;</span>, <span class="string">&#x27;0x655f69&#x27;</span>, <span class="string">&#x27;0x735f67&#x27;</span>, <span class="string">&#x27;0x726561&#x27;</span>, <span class="string">&#x27;0x74217d&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> flag:</span><br><span class="line">    temp = i[<span class="number">2</span>:]</span><br><span class="line">    <span class="keyword">while</span> temp != <span class="string">&#x27;&#x27;</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">chr</span>(<span class="built_in">int</span>(<span class="string">&#x27;0x&#x27;</span> + temp[:<span class="number">2</span>], <span class="number">16</span>)), end = <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        temp = temp[<span class="number">2</span>:]</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>字符串的处理使用python有点头疼，只会使用别人的工具的样子。</p>
+<hr>
+<h2 id="HDCTF2019-Maze"><a href="#HDCTF2019-Maze" class="headerlink" title="[HDCTF2019]Maze"></a>[HDCTF2019]Maze</h2><h3 id="文件描述"><a href="#文件描述" class="headerlink" title="文件描述"></a>文件描述</h3><p>下载下来查壳，发现UPX壳，所以直接命令行输入 ==UPX -d 文件== 脱完壳。</p>
+<p><img src="./images/BUUCTF-RE-0x07/image-20210719150757871.png" alt="image-20210719150757871"></p>
+<p>脱完壳后：</p>
+<p><img src="./images/BUUCTF-RE-0x07/image-20210719150923775.png" alt="image-20210719150923775"></p>
+<p>看见是32位的，直接先拉入IDA分析一波~</p>
+<h3 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h3><p>先SHift + F12 搜索一下字符串，然后看见了迷宫了。</p>
+<p><img src="./images/BUUCTF-RE-0x07/image-20210719151103242.png" alt="image-20210719151103242"></p>
+<p>双击跳转过去，然后看看有啥信息没有。</p>
+<p><img src="./images/BUUCTF-RE-0x07/image-20210719151150702.png" alt="image-20210719151150702"></p>
+<p>然后这里是可以看出这是个迷宫的，但是不知道是按什么来控制方向的，所以就需要看其他的信息。</p>
+<p>所以按 x 交叉引用看看在那里有没有什么信息。</p>
+<p><img src="./images/BUUCTF-RE-0x07/image-20210719151330404.png" alt="image-20210719151330404"></p>
+<p>然后找着找着就断了，看见这里的地址好像错了，然后就没了。然后决定先把迷宫给复原先。。</p>
+<p><img src="./images/BUUCTF-RE-0x07/image-20210719151840489.png" alt="image-20210719151840489"></p>
+<p>得到如下图案。</p>
+<p><img src="./images/BUUCTF-RE-0x07/image-20210719152032009.png" alt="image-20210719152032009"></p>
+<p>所以猜测flag</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ssaaasaassdddw</span><br><span class="line">或者</span><br><span class="line">88444844886662</span><br><span class="line">或者其他</span><br></pre></td></tr></table></figure>
+
+<p>然后就对了。。</p>
+<h3 id="flag-1"><a href="#flag-1" class="headerlink" title="flag"></a>flag</h3><figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">flag</span><span class="template-variable">&#123;ssaaasaassdddw&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>虽然没看到这个题的思路，然后准备看其他的WP。</p>
+<p>然后发现那个红色的地方是花指令。</p>
+<p>然后实践了一会儿，然后就放弃了。。。发现做不来，可能还是得看看书。</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h2 id="WUSTCTF2020-level2"><a href="#WUSTCTF2020-level2" class="headerlink" title="[WUSTCTF2020]level2"></a>[WUSTCTF2020]level2</h2><p><img src="E:/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/image-20210701181006272.png" alt="image-20210701181006272"></p>
+<p>发现UPX壳，所以使用自己的脱壳工具进行脱壳。、</p>
+<p>。。。。。</p>
+<p><img src="E:/%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/image-20210701181359242.png" alt="image-20210701181359242"></p>
+<p>我蒙了，这个啥意思啊。</p>
+<p>将包名改为flag后，提交就成功了。</p>
+<p><img src="./images/BUUCTF-RE-0x07/image-20210701181432462.png" alt="image-20210701181432462"></p>
+<p>有点无语。。。</p>
+<hr>
+<h2 id="CrackRTF"><a href="#CrackRTF" class="headerlink" title="CrackRTF"></a>CrackRTF</h2><h3 id="分析-2"><a href="#分析-2" class="headerlink" title="分析"></a>分析</h3><p>这个题目感觉不像是一分的题目，整个题目还是挺难的，有用到两个加密算法，不过我识别出来之后就看着别人的WP感到惊奇去了。发现自己还是有点菜。然后使用动态调试做了一遍。</p>
+<p><img src="/../../../%E6%96%87%E6%A1%A3/%E7%AC%94%E8%AE%B0/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/image-20210719155921836.png" alt="image-20210719155921836"></p>
+<p>得不到想要的flag，虽然隐隐约约看的见一点flag的影子。不过还是很难做出来。我看着大佬的脚本，感觉很好，然后决定就用他们的脚本跑，然后跑出来了。</p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>这个题用了可以直接通过 ida  看伪代码分析，不过没有识别出两个算法，对于常见的加密函数的关键的字没有注意。两个加密的函数都是没有改变过的。所以还是要多多注意。</p>
+<p>而在动态调试过程中，发现OllyDebug使用起来有点怪怪的，虚拟机里面正常一点。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42967398/article/details/96492843">wp</a></p>
+<hr>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Snow
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/" title="BUUCTF-RE-0x07">https://angelsnow1129.github/2021/07/19/BUUCTF-RE-0x07/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">春花秋月，夏荷冬雪。</div>
+    
+</div>
+  
+</div>
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/19/BUUCTF%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0-0x06/" rel="prev" title="BUUCTF刷题日记--0x06">
+      <i class="fa fa-chevron-left"></i> BUUCTF刷题日记--0x06
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/19/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94RSA%E7%AE%97%E6%B3%95/" rel="next" title="公开密钥加密算法——RSA算法">
+      公开密钥加密算法——RSA算法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GWCTF-2019-xxor"><span class="nav-number">1.</span> <span class="nav-text">[GWCTF 2019]xxor</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text">主函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B01"><span class="nav-number">1.3.</span> <span class="nav-text">函数1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B02"><span class="nav-number">1.4.</span> <span class="nav-text">函数2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag"><span class="nav-number">1.5.</span> <span class="nav-text">flag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.6.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDCTF2019-Maze"><span class="nav-number">2.</span> <span class="nav-text">[HDCTF2019]Maze</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.1.</span> <span class="nav-text">文件描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90-1"><span class="nav-number">2.2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-1"><span class="nav-number">2.3.</span> <span class="nav-text">flag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.4.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WUSTCTF2020-level2"><span class="nav-number">3.</span> <span class="nav-text">[WUSTCTF2020]level2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CrackRTF"><span class="nav-number">4.</span> <span class="nav-text">CrackRTF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90-2"><span class="nav-number">4.1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-1"><span class="nav-number">4.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">5.</span> <span class="nav-text">END</span></a></li></ol></div>
+
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow"
+      src="/images/AS.jpg">
+  <p class="site-author-name" itemprop="name">Snow</p>
+  <div class="site-description" itemprop="description">Hope, Marvel, Youth.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    来撩
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/angelsnow1129" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;angelsnow1129" rel="noopener" target="_blank"><i class="fa fa-fw fa-fab fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:angelsnow1129@163.com" title="E-Mail → mailto:angelsnow1129@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      友链
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="/T" title="T">0</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/i" title="i">1</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">2</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/l" title="l">3</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/e" title="e">4</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/:" title=":">5</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/h" title="h">6</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">7</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">8</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/p" title="p">9</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/s" title="s">10</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/:" title=":">11</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/" title="&#x2F;">12</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/" title="&#x2F;">13</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/p" title="p">14</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/a" title="a">15</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/n" title="n">16</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/d" title="d">17</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/a" title="a">18</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/0" title="0">19</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/s" title="s">20</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/." title=".">21</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">22</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/o" title="o">23</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/p" title="p">24</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/" title="&#x2F;">25</a>
+        </li>
+    </ul>
+  </div>
+
+
+  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 src="//music.163.com/outchain/player?type=0&id=6671522046&auto=1&height=90"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow</span>
+</div>
+
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>  
+<br>北岛有诗，南岛有梦。</br>
+
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/18/2021 01:11:29");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>

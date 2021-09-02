@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/AS.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/AS.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"angelsnow1129.github","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="树莓派4b安装tensorflow之2g版本性能不足安装的环境： 12345树莓派4b arm7l 不知名的野鸡SD卡  16g读卡器以及借来的显示器和连接的一些东西包括显示器的转接器  树莓派所需的东西 本文使用BerryConda配置的TensorFlow环境 嘿嘿">
+<meta property="og:type" content="article">
+<meta property="og:title" content="整活日志——树莓派4b安装tensorflow（armv7l,2g版本）">
+<meta property="og:url" content="https://angelsnow1129.github/2021/08/05/%E6%95%B4%E6%B4%BB%E6%97%A5%E5%BF%97%E2%80%94%E2%80%94%E6%A0%91%E8%8E%93%E6%B4%BE4b%E5%AE%89%E8%A3%85tensorflow%EF%BC%88armv7l-2g%E7%89%88%E6%9C%AC%EF%BC%89/index.html">
+<meta property="og:site_name" content="AngelSnow 个人博客">
+<meta property="og:description" content="树莓派4b安装tensorflow之2g版本性能不足安装的环境： 12345树莓派4b arm7l 不知名的野鸡SD卡  16g读卡器以及借来的显示器和连接的一些东西包括显示器的转接器  树莓派所需的东西 本文使用BerryConda配置的TensorFlow环境 嘿嘿">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-05T08:58:49.000Z">
+<meta property="article:modified_time" content="2021-09-02T09:16:22.827Z">
+<meta property="article:author" content="Snow">
+<meta property="article:tag" content="树莓派 整活 环境">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://angelsnow1129.github/2021/08/05/%E6%95%B4%E6%B4%BB%E6%97%A5%E5%BF%97%E2%80%94%E2%80%94%E6%A0%91%E8%8E%93%E6%B4%BE4b%E5%AE%89%E8%A3%85tensorflow%EF%BC%88armv7l-2g%E7%89%88%E6%9C%AC%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>整活日志——树莓派4b安装tensorflow（armv7l,2g版本） | AngelSnow 个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+  <!--pjax：防止跳转页面音乐暂停-->
+ <script src="https://cdn.jsdelivr.net/npm/[email protected]/pjax.js"></script>
+ 
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+
+  
+    <script src="/js/cursor/love.min.js"></script>
+  
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AngelSnow 个人博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">真，善，美</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://angelsnow1129.github/2021/08/05/%E6%95%B4%E6%B4%BB%E6%97%A5%E5%BF%97%E2%80%94%E2%80%94%E6%A0%91%E8%8E%93%E6%B4%BE4b%E5%AE%89%E8%A3%85tensorflow%EF%BC%88armv7l-2g%E7%89%88%E6%9C%AC%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/AS.jpg">
+      <meta itemprop="name" content="Snow">
+      <meta itemprop="description" content="Hope, Marvel, Youth.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AngelSnow 个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          整活日志——树莓派4b安装tensorflow（armv7l,2g版本）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-05 16:58:49" itemprop="dateCreated datePublished" datetime="2021-08-05T16:58:49+08:00">2021-08-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-02 17:16:22" itemprop="dateModified" datetime="2021-09-02T17:16:22+08:00">2021-09-02</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="热度" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">热度：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="树莓派4b安装tensorflow之2g版本性能不足"><a href="#树莓派4b安装tensorflow之2g版本性能不足" class="headerlink" title="树莓派4b安装tensorflow之2g版本性能不足"></a>树莓派4b安装tensorflow之2g版本性能不足</h1><p>安装的环境：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">树莓派<span class="number">4b</span> arm7l </span><br><span class="line">不知名的野鸡<span class="built_in">SD</span>卡  <span class="number">16</span>g</span><br><span class="line">读卡器</span><br><span class="line">以及借来的显示器和连接的一些东西</span><br><span class="line">包括显示器的转接器</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://moekrg-my.sharepoint.com/:f:/g/personal/angelsnow_krkr_xyz/EmaZYRKzfTRKqVrLNriqxPsBQrCH3y_jLX2_pHql264SwA?e=ABNtz9">树莓派所需的东西</a></p>
+<p>本文使用BerryConda配置的TensorFlow环境</p>
+<p>嘿嘿</p>
+<span id="more"></span>
+
+<h3 id="1-pip换源"><a href="#1-pip换源" class="headerlink" title="1.pip换源"></a>1.pip换源</h3><p>还是应该先换源的，不然确实有点慢。</p>
+<p>一行命令设置全局的下载：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip config <span class="keyword">set</span> <span class="keyword">global</span>.<span class="built_in">index</span>-url http<span class="variable">s:</span>//pypi.tuna.tsinghua.edu.<span class="keyword">cn</span>/simple</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-BerryConda"><a href="#2-BerryConda" class="headerlink" title="2.BerryConda"></a>2.BerryConda</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">wget</span> -r https://github.com/jjhelmus/berryconda/releases/download/v<span class="number">2</span>.<span class="number">0</span>.<span class="number">0</span>/Berryconda<span class="number">3</span>-<span class="number">2</span>.<span class="number">0</span>.<span class="number">0</span>-Linux-armv<span class="number">7</span>l.sh</span><br></pre></td></tr></table></figure>
+
+<p>在文件路径下</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x Berryconda<span class="number">3-2.0.0</span>-Linux-armv7l.sh</span><br><span class="line">./Berryconda<span class="number">3-2.0.0</span>-Linux-armv7l.sh</span><br></pre></td></tr></table></figure>
+
+<p>执行之后就可以创建虚拟的环境，然后可以安装需要的内容了</p>
+<h4 id="2-1-1-添加清华源"><a href="#2-1-1-添加清华源" class="headerlink" title="2.1.1 添加清华源"></a>2.1.1 添加清华源</h4><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>cloud<span class="regexp">/conda-forge/</span></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>cloud<span class="regexp">/bioconda/</span></span><br><span class="line">conda config --set show_channel_urls yes </span><br><span class="line">conda config --get channels</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-1-2-换回conda默认的源"><a href="#2-1-2-换回conda默认的源" class="headerlink" title="2.1.2 换回conda默认的源"></a>2.1.2 换回conda默认的源</h4><p>访问起来可能有些慢，但总比无法访问好。。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda <span class="built_in">config</span> <span class="comment">--remove-key channels</span></span><br><span class="line"><span class="comment">----这个尝试了，不过好像没用</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-conda常见环境管理命令"><a href="#2-2-conda常见环境管理命令" class="headerlink" title="2.2 conda常见环境管理命令"></a>2.2 conda常见环境管理命令</h4><p>命令<strong>查看已有环境列表</strong>，*表示当前环境，base表示默认环境</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda <span class="keyword">env</span> list</span><br></pre></td></tr></table></figure>
+
+<p>使用命令”conda create -n 环境名称 python=版本号”<strong>创建环境</strong>，这里创建了名称为3.6.7（名称不是很好)的python版本号为3.6.7的虚拟环境，稍微等待，<strong>过程中输入“y”。</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">conda</span> create -n Py<span class="number">3</span>.<span class="number">6</span>.<span class="number">7</span> python=<span class="number">3</span>.<span class="number">6</span>.<span class="number">7</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">conda</span> create -n 环境名称 python=版本号</span><br></pre></td></tr></table></figure>
+
+<p>查看环境列表，新环境已经创建好</p>
+<p><strong>激活环境</strong>，默认处于base环境，进入其他环境需要使用source activate手动切换（不是conda activate）</p>
+<p>若要<strong>退出当前环境</strong>，使用source deactivate，默认回到base 环境</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">source</span> deactivate Py<span class="number">3</span>.<span class="number">6</span>.<span class="number">7</span></span><br></pre></td></tr></table></figure>
+
+<p>这里提示命令“conda deactivates”已经废弃了，使用“ource deactivate”</p>
+<h3 id="3-最后用的BerryConda。。。。"><a href="#3-最后用的BerryConda。。。。" class="headerlink" title="3.最后用的BerryConda。。。。"></a>3.最后用的BerryConda。。。。</h3><h4 id="3-1-先激活环境"><a href="#3-1-先激活环境" class="headerlink" title="3.1 先激活环境"></a>3.1 先激活环境</h4><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">conda</span> create -n tf<span class="number">1</span>.<span class="number">14</span> python=<span class="number">3</span>.<span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<p>这个失败了几次，后面多试试居然就可以了。</p>
+<h4 id="3-2-进入所在的目录安装这个whl轮子。"><a href="#3-2-进入所在的目录安装这个whl轮子。" class="headerlink" title="3.2 进入所在的目录安装这个whl轮子。"></a>3.2 进入所在的目录安装这个whl轮子。</h4><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">source</span> activate tf<span class="number">1</span>.<span class="number">14</span>pip install tensorflow-<span class="number">1</span>.<span class="number">14</span>.<span class="number">0</span>-cp<span class="number">35</span>-none-linux_armv<span class="number">7</span>l.whl</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-vs-code安装Pylint（Python代码分析工具）"><a href="#3-3-vs-code安装Pylint（Python代码分析工具）" class="headerlink" title="3.3 vs code安装Pylint（Python代码分析工具）"></a>3.3 vs code安装Pylint（Python代码分析工具）</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install</span> pylint</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-安装yapf"><a href="#3-4-安装yapf" class="headerlink" title="3.4 安装yapf"></a>3.4 安装yapf</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install</span> yapf</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-5-安装依赖的Python软件包"><a href="#3-5-安装依赖的Python软件包" class="headerlink" title="3.5 安装依赖的Python软件包"></a>3.5 安装依赖的Python软件包</h4><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">pip</span> install matplotlib pillow lxml contextlib<span class="number">2</span> cython opencv-python </span><br></pre></td></tr></table></figure>
+
+<h4 id="3-6-配置有的文件所在的路径："><a href="#3-6-配置有的文件所在的路径：" class="headerlink" title="3.6 配置有的文件所在的路径："></a>3.6 配置有的文件所在的路径：</h4><p>————————————失败了————————————</p>
+<p>配置路径的方法（网上piao来的，不过后来发现好像不会用。。。害~~）：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用export语句<span class="builtin-name">export</span> <span class="attribute">PATH</span>=<span class="variable">$PATH</span>:/   +  地址</span><br></pre></td></tr></table></figure>
+
+<p>bash添加</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 用起来不对export PATH=$PATH:<span class="regexp">/home/</span>pi<span class="regexp">/Desktop/</span>tf_train<span class="regexp">/models/</span>research<span class="regexp">/export PATH=$PATH:/</span>home<span class="regexp">/pi/</span>Desktop<span class="regexp">/tf_train/m</span>odels<span class="regexp">/research/</span>slimexport PATH=$PATH:<span class="regexp">/home/</span>pi<span class="regexp">/Desktop/</span>tf_train<span class="regexp">/models/</span>research/object_detection</span><br></pre></td></tr></table></figure>
+
+<p>————————————失败了————————————</p>
+<p>下面的这个配置直接修改文件，当然成功啦，嘿嘿</p>
+<p>模仿文件里面的内容</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano ~<span class="string">/.bashrc</span></span><br></pre></td></tr></table></figure>
+
+<p>重新添加</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">PATH</span>=<span class="string">&quot;/home/pi/Desktop/tf_train/models/research:<span class="variable">$PATH</span>&quot;</span>export <span class="attribute">PATH</span>=<span class="string">&quot;/home/pi/Desktop/tf_train/models/research/slim:<span class="variable">$PATH</span>&quot;</span>export <span class="attribute">PATH</span>=<span class="string">&quot;/home/pi/Desktop/tf_train/models/research/object_detection:<span class="variable">$PATH</span>&quot;</span>source ~/.bashrcecho <span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-6-666-说明"><a href="#3-6-666-说明" class="headerlink" title="3.6.666 说明"></a>3.6.666 说明</h4><p>在这个例子中，我们将在 ~/.bashrc 文件中设置变量。因为用的是bash命令，所以是bashrc文件；其他的好像有不同的。</p>
+<p>使用文本编辑器打开文件，并在其末尾添加以下行：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano ~<span class="string">/.bashrc</span></span><br></pre></td></tr></table></figure>
+
+<p>文件 〜/.bashrc</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">PATH</span>=<span class="string">&quot;<span class="variable">$HOME</span>/bin:<span class="variable">$PATH</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用以下 source 命令保存文件并将新文件中的 $PATH 加载到当前 shell 会话中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p>要确认目录已成功添加，请 $PATH 键入以下内容以打印您的值：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4、安装CoCoAPI"><a href="#4、安装CoCoAPI" class="headerlink" title="4、安装CoCoAPI"></a>4、安装CoCoAPI</h3><h4 id="4-1-安装"><a href="#4-1-安装" class="headerlink" title="4.1 安装"></a>4.1 安装</h4><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(tf1.<span class="number">14</span>) pi<span class="variable">@snow</span><span class="symbol">:~</span> <span class="variable">$ </span>cd(tf1.<span class="number">14</span>) pi<span class="variable">@snow</span><span class="symbol">:~</span> <span class="variable">$ </span>cd Desktop/(tf1.<span class="number">14</span>) pi<span class="variable">@snow</span><span class="symbol">:~/Desktop</span> <span class="variable">$ </span>cd tf_train/(tf1.<span class="number">14</span>) pi<span class="variable">@snow</span><span class="symbol">:~/Desktop/tf_train</span> <span class="variable">$ </span>cd addons/(tf1.<span class="number">14</span>) pi<span class="variable">@snow</span><span class="symbol">:~/Desktop/tf_train/addons</span> <span class="variable">$ </span>cd cocoapi/(tf1.<span class="number">14</span>) pi<span class="variable">@snow</span><span class="symbol">:~/Desktop/tf_train/addons/cocoapi</span> <span class="variable">$ </span>cd PythonAPI/(tf1.<span class="number">14</span>) pi<span class="variable">@snow</span><span class="symbol">:~/Desktop/tf_train/addons/cocoapi/PythonAPI</span> <span class="variable">$ </span>python setup.py install<span class="comment">##进入目录 python setup.py install </span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-2-然后报错了"><a href="#4-2-然后报错了" class="headerlink" title="4.2 然后报错了"></a>4.2 然后报错了</h4><h5 id="然后就百度啊。。。"><a href="#然后就百度啊。。。" class="headerlink" title="然后就百度啊。。。"></a>然后就百度啊。。。</h5><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8917977/installing-lapack-for-numpy">发现了这个网站</a></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="builtin-name">get</span> <span class="builtin-name">remove</span> libopenblas-basesudo apt-<span class="builtin-name">get</span> install libgfortran3</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-3-解决后，又出现问题了。"><a href="#4-3-解决后，又出现问题了。" class="headerlink" title="4.3 解决后，又出现问题了。"></a>4.3 解决后，又出现问题了。</h4><p>会报错 ImportError: /home/pi/berryconda3/envs/tf1.14/lib/python3.5/site-packages/numpy/random/mtrand.cpython-35m-arm-linux-gnueabihf.so: undefined symbol: PyFPE_jbuf</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ImportError: <span class="regexp">/home/</span>pi<span class="regexp">/berryconda3/</span>envs<span class="regexp">/tf1.14/</span>lib<span class="regexp">/python3.5/</span>site-packages<span class="regexp">/numpy/</span>random/mtrand.cpython-<span class="number">35</span>m-arm-linux-gnueabihf.so: undefined symbol: PyFPE_jbuf</span><br></pre></td></tr></table></figure>
+
+<h5 id="看到的资料里有个让我有想法的尝试-文章"><a href="#看到的资料里有个让我有想法的尝试-文章" class="headerlink" title="看到的资料里有个让我有想法的尝试 文章"></a>看到的资料里有个让我有想法的尝试 <a target="_blank" rel="noopener" href="https://www.pythonheidong.com/blog/article/518622/fb7f9f61e994c041cda5/">文章</a></h5><p>他是说：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我看到的与此相关的大多数其他问题都与cython安装路径有关，或者与计算机上的另一个numpy有关，因此，这是我到目前为止所做的：卸载了<span class="literal">pi</span>上的默认numpy安装安装了cython，重新安装了numpy使用安装numpy pip install <span class="comment">--no-cache-dir numpy</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="所以我尝试着卸载numpy，然后重新安装cython，可是还是不行。"><a href="#所以我尝试着卸载numpy，然后重新安装cython，可是还是不行。" class="headerlink" title="所以我尝试着卸载numpy，然后重新安装cython，可是还是不行。"></a>所以我尝试着卸载numpy，然后重新安装cython，可是还是不行。</h5><p>然后经历了查阅一个小时多的资料，<a target="_blank" rel="noopener" href="https://blog.csdn.net/daixiangzi/article/details/104119429">然后参考这篇文章</a>，自己思考是不是哪里不适配。</p>
+<h5 id="终于试出来了。安装的numpy1-12版本的，用的conda安装"><a href="#终于试出来了。安装的numpy1-12版本的，用的conda安装" class="headerlink" title="终于试出来了。安装的numpy1.12版本的，用的conda安装"></a>终于试出来了。安装的numpy1.12版本的，用的conda安装</h5><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">conda</span> install numpy=<span class="number">1</span>.<span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="安装完成CoCoAPI"><a href="#安装完成CoCoAPI" class="headerlink" title="安装完成CoCoAPI"></a>安装完成CoCoAPI</h4><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(tf1.<span class="number">14</span>) pi<span class="variable">@snow</span><span class="symbol">:~/Desktop/tf_train/addons/cocoapi/PythonAPI</span> <span class="variable">$ </span>pythonPython <span class="number">3.5</span>.<span class="number">6</span> | packaged by rpi | (default, Sep  <span class="number">6</span> <span class="number">2018</span>, <span class="number">12</span><span class="symbol">:</span><span class="number">17</span><span class="symbol">:</span><span class="number">28</span>)[GCC <span class="number">6.3</span>.0 <span class="number">20170516</span>] on linuxType <span class="string">&quot;help&quot;</span>, <span class="string">&quot;copyright&quot;</span>, <span class="string">&quot;credits&quot;</span> <span class="keyword">or</span> <span class="string">&quot;license&quot;</span> <span class="keyword">for</span> more information.&gt;&gt;&gt; <span class="keyword">import</span> pycocotools&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>说明安装成功了。</p>
+<h3 id="5、编译proto文件"><a href="#5、编译proto文件" class="headerlink" title="5、编译proto文件"></a>5、编译proto文件</h3><p>使用tensorflow object detection API框架前，需要编译protocol文件</p>
+<p>现在在research文件夹激活环境</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd <span class="regexp">/home/</span>pi<span class="regexp">/Desktop/</span>tf_train<span class="regexp">/models/</span>researchsource deactivate tf1.<span class="number">14</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="5-1-编译proto文件命令："><a href="#5-1-编译proto文件命令：" class="headerlink" title="5.1 编译proto文件命令："></a>5.1 编译proto文件命令：</h4><h5 id="5-1-1-windows命令CMD窗口："><a href="#5-1-1-windows命令CMD窗口：" class="headerlink" title="5.1.1 windows命令CMD窗口："></a>5.1.1 windows命令CMD窗口：</h5><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> /f %i <span class="keyword">in</span> (<span class="string">&#x27;dir /b object_detection\protos\*.proto&#x27;</span>) <span class="keyword">do</span> protoc object_detection\protos\%i --python_out=.</span><br></pre></td></tr></table></figure>
+
+<p>这些都是尝试的命令</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="keyword">file</span> in object_detection\protos\*.proto;<span class="keyword">do</span> protoc object_detection\protos\$<span class="keyword">file</span> --python_out=object_detection\protos\$<span class="keyword">file</span> ;donefor <span class="keyword">file</span> in object_detection\protos\*.proto;<span class="keyword">do</span> protoc object_detection\protos\$<span class="keyword">file</span> --python_out=. ;donefor <span class="keyword">file</span> in object_detection<span class="regexp">/protos/</span>*.proto;<span class="keyword">do</span> protoc $<span class="keyword">file</span> --python_out=. ;done</span><br></pre></td></tr></table></figure>
+
+<p>这里报错不知道protoc是个什么东西，所以就查找，在某个角落发现了应该是我的版本较低的缘故，所以尝试下个高版本&gt;3.4的</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="builtin-name">get</span> install protobuf-compiler</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-1-2-树莓派下"><a href="#5-1-2-树莓派下" class="headerlink" title="5.1.2 树莓派下"></a>5.1.2 树莓派下</h5><p>这个运行命令成功：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="keyword">file</span> in object_detection<span class="regexp">/protos/</span>*.proto;<span class="keyword">do</span> protoc $<span class="keyword">file</span> --python_out=. ;done</span><br></pre></td></tr></table></figure>
+
+<p>网上查阅到的模块：也可</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc object_detection<span class="regexp">/protos/</span>*.proto --python_out=.</span><br></pre></td></tr></table></figure>
+
+<p>二选一就行</p>
+<h3 id="6、测试是否将TensorFlow-object-detection-API框架和依赖项安装成功"><a href="#6、测试是否将TensorFlow-object-detection-API框架和依赖项安装成功" class="headerlink" title="6、测试是否将TensorFlow object detection API框架和依赖项安装成功"></a>6、测试是否将TensorFlow object detection API框架和依赖项安装成功</h3><p>在文件夹中运行模型，进入菜单，运行测试的文件</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd <span class="regexp">/home/</span>pi<span class="regexp">/Desktop/</span>tf_train<span class="regexp">/models/</span>research/object_detectionpython object_detection_example_1.py </span><br></pre></td></tr></table></figure>
+
+<p>在windows中配置TensorFlow的object_detection模块时，需要利用protoc生成anchor_generator_pb2.py等多个文件，其命令是：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># <span class="keyword">From</span> tensorflow<span class="regexp">/models/</span>protoc object_detection<span class="regexp">/protos/</span>*.proto --python_out=.</span><br></pre></td></tr></table></figure>
+
+<p>该命令在Linux系统是没有问题的</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc object_detection<span class="regexp">/protos/</span>*.proto --python_out=.</span><br></pre></td></tr></table></figure>
+
+<p>然后就是开跑了。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span> activate tf1.<span class="number">14</span>cd <span class="regexp">/home/</span>pi<span class="regexp">/Desktop/</span>tf_train<span class="regexp">/models/</span>research/object_detectionpython object_detection_example_1.py</span><br></pre></td></tr></table></figure>
+
+<p>然后遗憾的是跑起来了，在运行直接来个已杀死哈哈哈哈。。。。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>也不知道发生了啥。。就感觉有点无语，不过树莓派已经肉眼可见的在运行，不过挺卡的。所以这个树莓派几乎是不能用来跑项目了。所以未来用它学习下OpenCV就好。。。。</p>
+<ul>
+<li><strong>本文作者：</strong> Sn0w</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Snow
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://angelsnow1129.github/2021/08/05/%E6%95%B4%E6%B4%BB%E6%97%A5%E5%BF%97%E2%80%94%E2%80%94%E6%A0%91%E8%8E%93%E6%B4%BE4b%E5%AE%89%E8%A3%85tensorflow%EF%BC%88armv7l-2g%E7%89%88%E6%9C%AC%EF%BC%89/" title="整活日志——树莓派4b安装tensorflow（armv7l,2g版本）">https://angelsnow1129.github/2021/08/05/整活日志——树莓派4b安装tensorflow（armv7l-2g版本）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">春花秋月，夏荷冬雪。</div>
+    
+</div>
+  
+</div>
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE-%E6%95%B4%E6%B4%BB-%E7%8E%AF%E5%A2%83/" rel="tag"><i class="fa fa-tag"></i> 树莓派 整活 环境</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/05/%E6%95%B4%E6%B4%BB%E6%97%A5%E5%BF%97%E2%80%94%E2%80%94%E6%A0%91%E8%8E%93%E6%B4%BE4b%E5%AE%89%E8%A3%85/" rel="prev" title="整活日志——树莓派4b安装">
+      <i class="fa fa-chevron-left"></i> 整活日志——树莓派4b安装
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/08/18/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE4b%E5%AE%89%E8%A3%85tensorflow%E4%B9%8B2g%E7%89%88%E6%9C%AC%E6%80%A7%E8%83%BD%E4%B8%8D%E8%B6%B3"><span class="nav-number">1.</span> <span class="nav-text">树莓派4b安装tensorflow之2g版本性能不足</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-pip%E6%8D%A2%E6%BA%90"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.pip换源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-BerryConda"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.BerryConda</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-%E6%B7%BB%E5%8A%A0%E6%B8%85%E5%8D%8E%E6%BA%90"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">2.1.1 添加清华源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-%E6%8D%A2%E5%9B%9Econda%E9%BB%98%E8%AE%A4%E7%9A%84%E6%BA%90"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">2.1.2 换回conda默认的源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-conda%E5%B8%B8%E8%A7%81%E7%8E%AF%E5%A2%83%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">2.2 conda常见环境管理命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%9C%80%E5%90%8E%E7%94%A8%E7%9A%84BerryConda%E3%80%82%E3%80%82%E3%80%82%E3%80%82"><span class="nav-number">1.0.3.</span> <span class="nav-text">3.最后用的BerryConda。。。。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E5%85%88%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">3.1 先激活环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-%E8%BF%9B%E5%85%A5%E6%89%80%E5%9C%A8%E7%9A%84%E7%9B%AE%E5%BD%95%E5%AE%89%E8%A3%85%E8%BF%99%E4%B8%AAwhl%E8%BD%AE%E5%AD%90%E3%80%82"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">3.2 进入所在的目录安装这个whl轮子。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-vs-code%E5%AE%89%E8%A3%85Pylint%EF%BC%88Python%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7%EF%BC%89"><span class="nav-number">1.0.3.3.</span> <span class="nav-text">3.3 vs code安装Pylint（Python代码分析工具）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-%E5%AE%89%E8%A3%85yapf"><span class="nav-number">1.0.3.4.</span> <span class="nav-text">3.4 安装yapf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%E7%9A%84Python%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="nav-number">1.0.3.5.</span> <span class="nav-text">3.5 安装依赖的Python软件包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-6-%E9%85%8D%E7%BD%AE%E6%9C%89%E7%9A%84%E6%96%87%E4%BB%B6%E6%89%80%E5%9C%A8%E7%9A%84%E8%B7%AF%E5%BE%84%EF%BC%9A"><span class="nav-number">1.0.3.6.</span> <span class="nav-text">3.6 配置有的文件所在的路径：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-6-666-%E8%AF%B4%E6%98%8E"><span class="nav-number">1.0.3.7.</span> <span class="nav-text">3.6.666 说明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E5%AE%89%E8%A3%85CoCoAPI"><span class="nav-number">1.0.4.</span> <span class="nav-text">4、安装CoCoAPI</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-%E5%AE%89%E8%A3%85"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">4.1 安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-%E7%84%B6%E5%90%8E%E6%8A%A5%E9%94%99%E4%BA%86"><span class="nav-number">1.0.4.2.</span> <span class="nav-text">4.2 然后报错了</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%84%B6%E5%90%8E%E5%B0%B1%E7%99%BE%E5%BA%A6%E5%95%8A%E3%80%82%E3%80%82%E3%80%82"><span class="nav-number">1.0.4.2.1.</span> <span class="nav-text">然后就百度啊。。。</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-%E8%A7%A3%E5%86%B3%E5%90%8E%EF%BC%8C%E5%8F%88%E5%87%BA%E7%8E%B0%E9%97%AE%E9%A2%98%E4%BA%86%E3%80%82"><span class="nav-number">1.0.4.3.</span> <span class="nav-text">4.3 解决后，又出现问题了。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9C%8B%E5%88%B0%E7%9A%84%E8%B5%84%E6%96%99%E9%87%8C%E6%9C%89%E4%B8%AA%E8%AE%A9%E6%88%91%E6%9C%89%E6%83%B3%E6%B3%95%E7%9A%84%E5%B0%9D%E8%AF%95-%E6%96%87%E7%AB%A0"><span class="nav-number">1.0.4.3.1.</span> <span class="nav-text">看到的资料里有个让我有想法的尝试 文章</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%89%80%E4%BB%A5%E6%88%91%E5%B0%9D%E8%AF%95%E7%9D%80%E5%8D%B8%E8%BD%BDnumpy%EF%BC%8C%E7%84%B6%E5%90%8E%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%85cython%EF%BC%8C%E5%8F%AF%E6%98%AF%E8%BF%98%E6%98%AF%E4%B8%8D%E8%A1%8C%E3%80%82"><span class="nav-number">1.0.4.3.2.</span> <span class="nav-text">所以我尝试着卸载numpy，然后重新安装cython，可是还是不行。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BB%88%E4%BA%8E%E8%AF%95%E5%87%BA%E6%9D%A5%E4%BA%86%E3%80%82%E5%AE%89%E8%A3%85%E7%9A%84numpy1-12%E7%89%88%E6%9C%AC%E7%9A%84%EF%BC%8C%E7%94%A8%E7%9A%84conda%E5%AE%89%E8%A3%85"><span class="nav-number">1.0.4.3.3.</span> <span class="nav-text">终于试出来了。安装的numpy1.12版本的，用的conda安装</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%AE%8C%E6%88%90CoCoAPI"><span class="nav-number">1.0.4.4.</span> <span class="nav-text">安装完成CoCoAPI</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5%E3%80%81%E7%BC%96%E8%AF%91proto%E6%96%87%E4%BB%B6"><span class="nav-number">1.0.5.</span> <span class="nav-text">5、编译proto文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-%E7%BC%96%E8%AF%91proto%E6%96%87%E4%BB%B6%E5%91%BD%E4%BB%A4%EF%BC%9A"><span class="nav-number">1.0.5.1.</span> <span class="nav-text">5.1 编译proto文件命令：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#5-1-1-windows%E5%91%BD%E4%BB%A4CMD%E7%AA%97%E5%8F%A3%EF%BC%9A"><span class="nav-number">1.0.5.1.1.</span> <span class="nav-text">5.1.1 windows命令CMD窗口：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-1-2-%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8B"><span class="nav-number">1.0.5.1.2.</span> <span class="nav-text">5.1.2 树莓派下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6%E3%80%81%E6%B5%8B%E8%AF%95%E6%98%AF%E5%90%A6%E5%B0%86TensorFlow-object-detection-API%E6%A1%86%E6%9E%B6%E5%92%8C%E4%BE%9D%E8%B5%96%E9%A1%B9%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="nav-number">1.0.6.</span> <span class="nav-text">6、测试是否将TensorFlow object detection API框架和依赖项安装成功</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.0.7.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow"
+      src="/images/AS.jpg">
+  <p class="site-author-name" itemprop="name">Snow</p>
+  <div class="site-description" itemprop="description">Hope, Marvel, Youth.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    来撩
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/angelsnow1129" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;angelsnow1129" rel="noopener" target="_blank"><i class="fa fa-fw fa-fab fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:angelsnow1129@163.com" title="E-Mail → mailto:angelsnow1129@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      友链
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="/T" title="T">0</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/i" title="i">1</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">2</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/l" title="l">3</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/e" title="e">4</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/:" title=":">5</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/h" title="h">6</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">7</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">8</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/p" title="p">9</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/s" title="s">10</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/:" title=":">11</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/" title="&#x2F;">12</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/" title="&#x2F;">13</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/p" title="p">14</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/a" title="a">15</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/n" title="n">16</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/d" title="d">17</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/a" title="a">18</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/0" title="0">19</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/s" title="s">20</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/." title=".">21</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">22</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/o" title="o">23</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/p" title="p">24</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/" title="&#x2F;">25</a>
+        </li>
+    </ul>
+  </div>
+
+
+  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 src="//music.163.com/outchain/player?type=0&id=6671522046&auto=1&height=90"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow</span>
+</div>
+
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>  
+<br>北岛有诗，南岛有梦。</br>
+
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/18/2021 01:11:29");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>

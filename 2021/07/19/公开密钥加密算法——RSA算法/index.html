@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/AS.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/AS.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"angelsnow1129.github","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="公开密钥加密算法——RSA算法RSA 算法1 由来RSA 是第一个既能用于数据加密也能用于数字签名的算法，易于理解和操作， 应用广泛。该算法以发明者的名字命名一一Ron Rivest、Adi Shamir 和Leonard Adleman，他们三个人的第一个字符就是。密码分析者既不能证明也不能否定RSA 的安全性， 但这恰恰说明该算法有一定的可信度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="公开密钥加密算法——RSA算法">
+<meta property="og:url" content="https://angelsnow1129.github/2021/07/19/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94RSA%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="AngelSnow 个人博客">
+<meta property="og:description" content="公开密钥加密算法——RSA算法RSA 算法1 由来RSA 是第一个既能用于数据加密也能用于数字签名的算法，易于理解和操作， 应用广泛。该算法以发明者的名字命名一一Ron Rivest、Adi Shamir 和Leonard Adleman，他们三个人的第一个字符就是。密码分析者既不能证明也不能否定RSA 的安全性， 但这恰恰说明该算法有一定的可信度">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://angelsnow1129.github/images/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94RSA%E7%AE%97%E6%B3%95/202109021742514.png">
+<meta property="article:published_time" content="2021-07-19T07:52:07.000Z">
+<meta property="article:modified_time" content="2021-09-02T09:56:05.952Z">
+<meta property="article:author" content="Snow">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://angelsnow1129.github/images/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94RSA%E7%AE%97%E6%B3%95/202109021742514.png">
+
+<link rel="canonical" href="https://angelsnow1129.github/2021/07/19/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94RSA%E7%AE%97%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>公开密钥加密算法——RSA算法 | AngelSnow 个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+  <!--pjax：防止跳转页面音乐暂停-->
+ <script src="https://cdn.jsdelivr.net/npm/[email protected]/pjax.js"></script>
+ 
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+
+  
+    <script src="/js/cursor/love.min.js"></script>
+  
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">AngelSnow 个人博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">真，善，美</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://angelsnow1129.github/2021/07/19/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94RSA%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/AS.jpg">
+      <meta itemprop="name" content="Snow">
+      <meta itemprop="description" content="Hope, Marvel, Youth.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AngelSnow 个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          公开密钥加密算法——RSA算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-19 15:52:07" itemprop="dateCreated datePublished" datetime="2021-07-19T15:52:07+08:00">2021-07-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-02 17:56:05" itemprop="dateModified" datetime="2021-09-02T17:56:05+08:00">2021-09-02</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="热度" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">热度：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="公开密钥加密算法——RSA算法"><a href="#公开密钥加密算法——RSA算法" class="headerlink" title="公开密钥加密算法——RSA算法"></a>公开密钥加密算法——RSA算法</h1><h1 id="RSA-算法"><a href="#RSA-算法" class="headerlink" title="RSA 算法"></a>RSA 算法</h1><h2 id="1-由来"><a href="#1-由来" class="headerlink" title="1 由来"></a>1 由来</h2><p>RSA 是第一个既能用于数据加密也能用于数字签名的算法，易于理解和操作， 应用广泛。该算法以发明者的名字命名一一Ron Rivest、Adi Shamir 和Leonard Adleman，他们三个人的第一个字符就是。密码分析者既不能证明也不能否定RSA 的安全性， 但这恰恰说明该算法有一定的可信度<span id="more"></span></p>
+<h2 id="2-算法原理"><a href="#2-算法原理" class="headerlink" title="2 算法原理"></a>2 算法原理</h2><p>①选取两个大素数p和q，为了获得最高的安全性，设两数的长度一样。</p>
+<p>②计算n=p*q, n称为模。</p>
+<p>③计算欧拉(Euler)函数: <em>φ</em>(n)=(p-1)(q-1)。</p>
+<p>④选取加密密钥e,其与<em>φ</em>(n)互素。如果选择的e值合适，RSA加解密的速度将会加快。e的常用值为3、17和65537(216+1)。</p>
+<p>⑤使用扩展欧几里德算法(Extended Euclid Algorithm) 求出e模<em>φ</em>(n)的逆元d, 即</p>
+<p><em><strong>ed* <em>≡</em> *1 mod φ(n)</strong></em> </p>
+<p>⑥公钥为e和n, 私钥为d, p和q可以丢弃，但是必须保密。</p>
+<p>⑦加密消息m时，将其看成一个大整数，并把它分成比n小的数据分组，按下面的式子进行加密。</p>
+<p><em><strong>ci* <em>≡</em> *mie mod n</strong></em></p>
+<p>⑧解密密文c时，取每一个加密后的分组Ci并计算，即</p>
+<p><em><strong>mi* <em>≡</em> *cid mod n</strong></em></p>
+<p>对RSA加解密的总结如表所示。</p>
+<table>
+<thead>
+<tr>
+<th>RSA加解密总结</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内容</td>
+<td>说明</td>
+</tr>
+<tr>
+<td>公钥</td>
+<td>n:   两个很大的素数（p,q）的乘积（p,q要保密）   e: (p -1)(q -1) 互素</td>
+</tr>
+<tr>
+<td>私钥</td>
+<td>d : e-1 mod ((p-1)*(q-1))</td>
+</tr>
+<tr>
+<td>加密</td>
+<td>c   = me mod n</td>
+</tr>
+<tr>
+<td>解密</td>
+<td>m =   cd mod n</td>
+</tr>
+</tbody></table>
+<p><strong>表1 RSA 加解密总结</strong></p>
+<p>可以看出，RSA算法的安全性依赖于大整数因式分解，但是否等同于大整数因式分解一直未能得到数学上的证明，也就是说，没有证明要解密RSA就一定要进行因式分解。尽管RSA的一些变形算法已被证明等价于大整数因式分解问题，例如Rabin公开密钥系统，但是攻击RSA算法最有效的方法仍是分解模n。随着分解大整数方法的改进、计算机运算速度的提高及计算机网络的发展(可以使用互联网上成千上万的计算资源同时进行因式分解),为了保证RSA系统的安全性，其密钥的位数一直在增加。目前，一般认为RSA算法需要1024位或更长的模数才有安全保障。常见的因式分解算法有试除法( Trial Division )、Pollard-p 因式分解算法、Pollard p-1因式分解算法、椭圆曲线因式分解算法( Elliptic Curve Factoring Algorithm )、随机平方因式分解算法( Random Square Factoring Algorithm )、连分式因式分解算法( Continued Factoring Algorithm)、二次筛法( Quadratic Sieving )和数域筛法( Number Field Sieving,包括一般(广义)数域筛法( GNFS)和特殊数域筛法( SNFS))。</p>
+<h2 id="3-RSA-算法在加密中的应用"><a href="#3-RSA-算法在加密中的应用" class="headerlink" title="3 RSA 算法在加密中的应用"></a>3 RSA 算法在加密中的应用</h2><p>大多数共享软件的注册码笲法设计得不是很好，比较容易被解密并写出注册机如果采用公钥算法作为注册保护机制（例如RSA)，可以参考如下思路。</p>
+<p>1.要求其模数所定的长度（至少为5l2位，推荐取1024位或更长），以防止在较短时间内被因式分解，从而使算法被攻破。但是，注册码的长度也因此变长了，这可能会给用户带来不便。因此，可以采取授权文件(License File)的形式将注册码分发给注册用户。</p>
+<p>2.随机生成密钥对时，要采用尽可能好的随机数生成算法，以免公钥或私钥被轻而易举地猜到。</p>
+<p>3.在注册机中用公钥e对用户名进行加密可得到注册码，在软件中对用户输入的注册码用私钥d进行解密可以得到用户名。此时，公钥e不能取常用的3，65537等值，因为解密者一旦猜出或算出e，也可以写出注册机。</p>
+<p>4.以上方法只能防止解密者写出注册机．却无法防止其通过修改程序中跳转指令的方法来破解软件。为了防止他人修改程序文件，可以用注册码中的一部分来加密程序代码或数据。 </p>
+<h2 id="4-攻击RSA保护"><a href="#4-攻击RSA保护" class="headerlink" title="4 攻击RSA保护"></a>4 攻击RSA保护</h2><p>采用RSA保护时，模数n的位数不能太少。在实际应用中有些共享软件虽然采用了RSA保护，但n太短，这样就失去了RSA保护的意义。在攻击由RSA保护的软件时，一般先通过跟踪分析得到n，再将因式分解，求出私钥d ，进而写出注册机。</p>
+<h2 id="5-实例演示RSA解密"><a href="#5-实例演示RSA解密" class="headerlink" title="5 实例演示RSA解密"></a>5 实例演示RSA解密</h2><h3 id="5-1-已知公钥文件和密钥文件，获取密文的内容。"><a href="#5-1-已知公钥文件和密钥文件，获取密文的内容。" class="headerlink" title="5.1 已知公钥文件和密钥文件，获取密文的内容。"></a>5.1 已知公钥文件和密钥文件，获取密文的内容。</h3><h4 id="5-1-1-公钥文件-pub-key"><a href="#5-1-1-公钥文件-pub-key" class="headerlink" title="5.1.1 公钥文件 pub.key"></a>5.1.1 公钥文件 pub.key</h4><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="params">-----BEGIN</span> PUBLIC KEY<span class="params">-----</span></span><br><span class="line">MDwwDQYJKoZIhvcNAQEBBQADKwAwKAIhAMAzLFxkrkcYL2wch21CM2kQVFpY9+7+</span><br><span class="line"><span class="string">/AvKr1rzQczdAgMBAAE=</span></span><br><span class="line"><span class="params">-----END</span> PUBLIC KEY<span class="params">-----</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="5-1-2-密文文件-flag-enc"><a href="#5-1-2-密文文件-flag-enc" class="headerlink" title="5.1.2 密文文件 flag.enc"></a>5.1.2 密文文件 flag.enc</h4><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">4196</span> c059 4a5e <span class="number">000a</span> <span class="number">96b8</span> <span class="number">78b6</span> 7cd7 <span class="number">2479</span></span><br><span class="line"><span class="number">5b13</span> a8f2 ca54 da06 d0f1 9c28 be68 <span class="number">9b62</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="5-1-3-分析解密"><a href="#5-1-3-分析解密" class="headerlink" title="5.1.3 分析解密"></a>5.1.3 分析解密</h4><h5 id="1-解密公钥"><a href="#1-解密公钥" class="headerlink" title="1.  解密公钥"></a>1.  解密公钥</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">path=<span class="string">&quot;C:/Users/张宏/Desktop/CTF/BUUCTF-RE/rsa/41c4e672-98c5-43e5-adf4-49d75db307e4/output/&quot;</span></span><br><span class="line">r=open(path+<span class="string">&quot;pub.key&quot;</span>).read()</span><br><span class="line">pub=RSA.importKey(r)</span><br><span class="line">n=pub.n</span><br><span class="line">e=pub.e</span><br><span class="line"></span><br><span class="line">print( n)</span><br><span class="line"><span class="meta"># n= 86934482296048119190666062003494800588905656017203025617216654058378322103517</span></span><br><span class="line">print( e)</span><br><span class="line"><span class="meta"># e= 65537</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="2-解密出P和Q"><a href="#2-解密出P和Q" class="headerlink" title="2.  解密出P和Q"></a>2.  解密出P和Q</h5><p>使用yafu解密，运行输入factor(n)</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">factor</span><span class="params">(<span class="number">86934482296048119190666062003494800588905656017203025617216654058378322103517</span>)</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94RSA%E7%AE%97%E6%B3%95/202109021742514.png" alt="image-20210614003002909"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\***\Desktop\CTF\rsa\yafu<span class="number">-1.34</span>&gt;yafu-x64.exe</span><br><span class="line">factor(<span class="number">86934482296048119190666062003494800588905656017203025617216654058378322103517</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fac: factoring <span class="number">86934482296048119190666062003494800588905656017203025617216654058378322103517</span></span><br><span class="line">fac: <span class="keyword">using</span> pretesting plan: normal</span><br><span class="line">fac: no tune info: <span class="keyword">using</span> qs/gnfs crossover of <span class="number">95</span> digits</span><br><span class="line">div: primes less than <span class="number">10000</span></span><br><span class="line">fmt: <span class="number">1000000</span> iterations</span><br><span class="line">rho: x^<span class="number">2</span> + <span class="number">3</span>, starting <span class="number">1000</span> iterations on C77</span><br><span class="line">rho: x^<span class="number">2</span> + <span class="number">2</span>, starting <span class="number">1000</span> iterations on C77</span><br><span class="line">rho: x^<span class="number">2</span> + <span class="number">1</span>, starting <span class="number">1000</span> iterations on C77</span><br><span class="line">pm1: starting B1 = <span class="number">150</span>K, B2 = gmp-ecm <span class="keyword">default</span> on C77</span><br><span class="line">ecm: <span class="number">30</span>/<span class="number">30</span> curves on C77, B1=<span class="number">2</span>K, B2=gmp-ecm <span class="keyword">default</span></span><br><span class="line">ecm: <span class="number">74</span>/<span class="number">74</span> curves on C77, B1=<span class="number">11</span>K, B2=gmp-ecm <span class="keyword">default</span></span><br><span class="line">ecm: <span class="number">149</span>/<span class="number">149</span> curves on C77, B1=<span class="number">50</span>K, B2=gmp-ecm <span class="keyword">default</span>, ETA: <span class="number">0</span> sec</span><br><span class="line"></span><br><span class="line">starting SIQS on c77: <span class="number">86934482296048119190666062003494800588905656017203025617216654058378322103517</span></span><br><span class="line"></span><br><span class="line">==== sieving in progress (<span class="number">1</span> thread):   <span class="number">36224</span> relations needed ====</span><br><span class="line">====           Press ctrl-c to <span class="built_in">abort</span> <span class="keyword">and</span> save state           ====</span><br><span class="line"><span class="number">35215</span> rels found: <span class="number">18393</span> full + <span class="number">16822</span> from <span class="number">182084</span> partial, (<span class="number">2790.32</span> rels/sec)</span><br><span class="line"></span><br><span class="line">SIQS elapsed time = <span class="number">74.3669</span> seconds.</span><br><span class="line">Total factoring time = <span class="number">88.3733</span> seconds</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">***factors found***</span><br><span class="line"></span><br><span class="line">P39 = <span class="number">285960468890451637935629440372639283459</span></span><br><span class="line">P39 = <span class="number">304008741604601924494328155975272418463</span></span><br><span class="line"></span><br><span class="line">ans = <span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>所以P,Q</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">P = <span class="number">285960468890451637935629440372639283459</span></span><br><span class="line">Q = <span class="number">304008741604601924494328155975272418463</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>所以接下来上脚本。</p>
+<h4 id="5-1-4-脚本"><a href="#5-1-4-脚本" class="headerlink" title="5.1.4 脚本"></a>5.1.4 脚本</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Crypto</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"><span class="keyword">from</span> Crypto.PublicKey <span class="keyword">import</span> RSA</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes,bytes_to_long</span><br><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">import</span> rsa</span><br><span class="line"></span><br><span class="line">path=<span class="string">&quot;C:/Users/张宏/Desktop/CTF/BUUCTF-RE/rsa/41c4e672-98c5-43e5-adf4-49d75db307e4/output/&quot;</span></span><br><span class="line">r=<span class="built_in">open</span>(path+<span class="string">&quot;pub.key&quot;</span>).read()</span><br><span class="line">pub=RSA.importKey(r)</span><br><span class="line">n=pub.n</span><br><span class="line">e=pub.e </span><br><span class="line"><span class="built_in">print</span>( n)</span><br><span class="line"><span class="comment"># n= 86934482296048119190666062003494800588905656017203025617216654058378322103517</span></span><br><span class="line"><span class="built_in">print</span>( e)</span><br><span class="line"><span class="comment"># e= 65537 </span></span><br><span class="line"><span class="comment"># yahu 破解p,q </span></span><br><span class="line">p = <span class="number">285960468890451637935629440372639283459</span></span><br><span class="line">q = <span class="number">304008741604601924494328155975272418463</span></span><br><span class="line">phi = (p-<span class="number">1</span>)*(q-<span class="number">1</span>)</span><br><span class="line">d= gmpy2.invert(e,phi)</span><br><span class="line"></span><br><span class="line">key = rsa.PrivateKey(n, e, <span class="built_in">int</span>(d), p, q)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(path+<span class="string">&quot;flag.enc&quot;</span>, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f = f.read()</span><br><span class="line">    <span class="built_in">print</span>(rsa.decrypt(f, key).decode(<span class="string">&#x27;UTF-8&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># flag&#123;decrypt_256&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>即flag就出来了。</p>
+<h4 id="5-1-5-得到密文"><a href="#5-1-5-得到密文" class="headerlink" title="5.1.5 得到密文"></a>5.1.5 得到密文</h4><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">flag</span>&#123;decrypt_<span class="number">256</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>问题归结到选择合适的n值,再根据ψ(n)选择e和d。当n非常大时计算ψ(n)是十分困难的，这保证了在公布公钥后私钥难以通过公钥推算出来，但是生成密钥对时我们不可能花大量时间来做这样的运算，因此，选择两个很大的质数p和q , 显然有ψ(p)=p-1和ψ(q)=q-1，不难证明ψ(p,q)= lcm(p- 1,q- 1) ,这样就使生成密钥对时进行的计算大大减少，而破解者想要得到ψ(n)除了按部就班计算外只有通过求解n的质因数p和q来得到，而对大数n进行质因数分解同样十分困难，这样就保证了密钥交换的安全性。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Snow
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://angelsnow1129.github/2021/07/19/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94RSA%E7%AE%97%E6%B3%95/" title="公开密钥加密算法——RSA算法">https://angelsnow1129.github/2021/07/19/公开密钥加密算法——RSA算法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">春花秋月，夏荷冬雪。</div>
+    
+</div>
+  
+</div>
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/19/BUUCTF-RE-0x07/" rel="prev" title="BUUCTF-RE-0x07">
+      <i class="fa fa-chevron-left"></i> BUUCTF-RE-0x07
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/08/05/%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1%E4%BD%9C%E4%B8%9A%E7%9A%84%E5%B0%8F%E7%BB%93/" rel="next" title="第一次数学建模作业的小结">
+      第一次数学建模作业的小结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94RSA%E7%AE%97%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">公开密钥加密算法——RSA算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RSA-%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">RSA 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%94%B1%E6%9D%A5"><span class="nav-number">2.1.</span> <span class="nav-text">1 由来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">2 算法原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-RSA-%E7%AE%97%E6%B3%95%E5%9C%A8%E5%8A%A0%E5%AF%86%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">3 RSA 算法在加密中的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%94%BB%E5%87%BBRSA%E4%BF%9D%E6%8A%A4"><span class="nav-number">2.4.</span> <span class="nav-text">4 攻击RSA保护</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%AE%9E%E4%BE%8B%E6%BC%94%E7%A4%BARSA%E8%A7%A3%E5%AF%86"><span class="nav-number">2.5.</span> <span class="nav-text">5 实例演示RSA解密</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%B7%B2%E7%9F%A5%E5%85%AC%E9%92%A5%E6%96%87%E4%BB%B6%E5%92%8C%E5%AF%86%E9%92%A5%E6%96%87%E4%BB%B6%EF%BC%8C%E8%8E%B7%E5%8F%96%E5%AF%86%E6%96%87%E7%9A%84%E5%86%85%E5%AE%B9%E3%80%82"><span class="nav-number">2.5.1.</span> <span class="nav-text">5.1 已知公钥文件和密钥文件，获取密文的内容。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-1-%E5%85%AC%E9%92%A5%E6%96%87%E4%BB%B6-pub-key"><span class="nav-number">2.5.1.1.</span> <span class="nav-text">5.1.1 公钥文件 pub.key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-2-%E5%AF%86%E6%96%87%E6%96%87%E4%BB%B6-flag-enc"><span class="nav-number">2.5.1.2.</span> <span class="nav-text">5.1.2 密文文件 flag.enc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-3-%E5%88%86%E6%9E%90%E8%A7%A3%E5%AF%86"><span class="nav-number">2.5.1.3.</span> <span class="nav-text">5.1.3 分析解密</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E8%A7%A3%E5%AF%86%E5%85%AC%E9%92%A5"><span class="nav-number">2.5.1.3.1.</span> <span class="nav-text">1.  解密公钥</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E8%A7%A3%E5%AF%86%E5%87%BAP%E5%92%8CQ"><span class="nav-number">2.5.1.3.2.</span> <span class="nav-text">2.  解密出P和Q</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-4-%E8%84%9A%E6%9C%AC"><span class="nav-number">2.5.1.4.</span> <span class="nav-text">5.1.4 脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-5-%E5%BE%97%E5%88%B0%E5%AF%86%E6%96%87"><span class="nav-number">2.5.1.5.</span> <span class="nav-text">5.1.5 得到密文</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%80%BB%E7%BB%93"><span class="nav-number">2.6.</span> <span class="nav-text">6. 总结</span></a></li></ol></li></ol></div>
+
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Snow"
+      src="/images/AS.jpg">
+  <p class="site-author-name" itemprop="name">Snow</p>
+  <div class="site-description" itemprop="description">Hope, Marvel, Youth.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    来撩
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/angelsnow1129" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;angelsnow1129" rel="noopener" target="_blank"><i class="fa fa-fw fa-fab fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:angelsnow1129@163.com" title="E-Mail → mailto:angelsnow1129@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      友链
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="/T" title="T">0</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/i" title="i">1</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">2</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/l" title="l">3</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/e" title="e">4</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/:" title=":">5</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/h" title="h">6</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">7</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">8</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/p" title="p">9</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/s" title="s">10</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/:" title=":">11</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/" title="&#x2F;">12</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/" title="&#x2F;">13</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/p" title="p">14</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/a" title="a">15</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/n" title="n">16</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/d" title="d">17</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/a" title="a">18</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/0" title="0">19</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/s" title="s">20</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/." title=".">21</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/t" title="t">22</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/o" title="o">23</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/p" title="p">24</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="/" title="&#x2F;">25</a>
+        </li>
+    </ul>
+  </div>
+
+
+  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=110 src="//music.163.com/outchain/player?type=0&id=6671522046&auto=1&height=90"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow</span>
+</div>
+
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>  
+<br>北岛有诗，南岛有梦。</br>
+
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/18/2021 01:11:29");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+    <script defer src="/lib/three/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>
